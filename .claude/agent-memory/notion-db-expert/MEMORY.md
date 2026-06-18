@@ -1,0 +1,2 @@
+- [Notion API 통합 전략 (invoice-web)](project-notion-integration.md) — 단방향 임포트 구조, Internal Token, Page + Table 블록 파싱 방식
+- [사용자 프로필](user-freelancer-saas.md) — 프리랜서 SaaS 개발자, Next.js 15 + Supabase + Notion API 스택
