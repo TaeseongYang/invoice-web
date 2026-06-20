@@ -1,6 +1,5 @@
 'use client'
 
-import type { Metadata } from 'next'
 import { useSearchParams } from 'next/navigation'
 import { CheckCircle, Clock, XCircle } from 'lucide-react'
 
@@ -42,11 +41,7 @@ const responseConfig = {
   },
 }
 
-export default function InvoiceResponsePage({
-  params,
-}: {
-  params: Promise<{ token: string }>
-}) {
+export default function InvoiceResponsePage() {
   const searchParams = useSearchParams()
   // TODO: token과 status로 DB에서 실제 응답 데이터 조회
 
@@ -90,7 +85,11 @@ export default function InvoiceResponsePage({
 
             {/* 닫기 버튼 */}
             {/* TODO: 별도 CloseButton Client Component로 분리하거나 history.back() 구현 */}
-            <Button variant="outline" className="w-full" onClick={() => window.history.back()}>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => window.history.back()}
+            >
               닫기
             </Button>
           </CardContent>

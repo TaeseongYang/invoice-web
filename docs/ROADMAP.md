@@ -20,30 +20,33 @@
 ## 프로젝트 개요
 
 ### 핵심 가치
+
 - 프리랜서가 **노션 URL만으로** 전문적인 견적서 공유 링크를 **5분 내에** 생성
 - 클라이언트가 별도 계정 없이 **공유 링크로** 견적서 확인 및 응답
 - PDF 다운로드, 승인/거절/보류 상태 추적
 
 ### MVP 성공 지표
-| 지표 | 목표 |
-|------|------|
+
+| 지표                      | 목표     |
+| ------------------------- | -------- |
 | 노션 URL → 공유 링크 생성 | 5분 이내 |
-| 웹 뷰 로딩 시간 | 2초 이내 |
-| PDF 다운로드 시간 | 3초 이내 |
-| 공유 링크 유효 기간 | 30일 |
+| 웹 뷰 로딩 시간           | 2초 이내 |
+| PDF 다운로드 시간         | 3초 이내 |
+| 공유 링크 유효 기간       | 30일     |
 
 ### 핵심 기능 (F001~F012)
-| ID | 기능명 | Phase |
-|----|--------|-------|
-| F001 | 노션 API 연동 (페이지 메타 + 테이블 파싱) | 3 |
-| F002 | 견적서 발송 및 공유 링크 생성 | 3 |
-| F003 | 견적서 웹 뷰 (토큰 기반 공개 접근) | 3 |
-| F004 | PDF 다운로드 (클라이언트 사이드) | 4 |
-| F005 | 견적서 상태 관리 (승인/거절/보류) | 3 |
-| F006 | 견적서 목록 조회 (프리랜서 대시보드) | 3 |
-| F010 | 기본 인증 (회원가입/로그인/로그아웃) | 3 |
-| F011 | 프리랜서 기본 정보 관리 | 2 |
-| F012 | 클라이언트 기본 정보 저장 | 2 |
+
+| ID   | 기능명                                    | Phase |
+| ---- | ----------------------------------------- | ----- |
+| F001 | 노션 API 연동 (페이지 메타 + 테이블 파싱) | 3     |
+| F002 | 견적서 발송 및 공유 링크 생성             | 3     |
+| F003 | 견적서 웹 뷰 (토큰 기반 공개 접근)        | 3     |
+| F004 | PDF 다운로드 (클라이언트 사이드)          | 4     |
+| F005 | 견적서 상태 관리 (승인/거절/보류)         | 3     |
+| F006 | 견적서 목록 조회 (프리랜서 대시보드)      | 3     |
+| F010 | 기본 인증 (회원가입/로그인/로그아웃)      | 3     |
+| F011 | 프리랜서 기본 정보 관리                   | 2     |
+| F012 | 클라이언트 기본 정보 저장                 | 2     |
 
 ---
 
@@ -52,6 +55,7 @@
 ### 구조 우선 접근법 (Structure-First Approach)
 
 **왜 이 접근법을 선택했나?**
+
 - 초기 아키텍처 결정이 이후 모든 개발 단계에 영향
 - 데이터 모델과 라우팅 구조가 명확하면, UI와 기능 구현이 병렬 가능
 - 초기 "빈 틀"로 전체 팀이 같은 구조 위에서 작업 가능
@@ -76,12 +80,12 @@
 
 ### 각 Phase의 특징
 
-| Phase | 초점 | 테스트 방식 | 결과물 |
-|-------|------|-----------|--------|
-| **1** | 아키텍처 정의 | 타입 체크, 구조 검증 | 라우팅 구조, 타입 정의, DB 스키마 |
-| **2** | UI/UX 확정 | 시각적 검증, 반응형 테스트 | 모든 페이지 UI (더미 데이터) |
-| **3** | 비즈니스 로직 | E2E 테스트 (Playwright) | API, 데이터 흐름, 상태 관리 |
-| **4** | 성능 & 안정성 | 성능 프로파일링, 배포 테스트 | 최적화된 배포 가능 버전 |
+| Phase | 초점          | 테스트 방식                  | 결과물                            |
+| ----- | ------------- | ---------------------------- | --------------------------------- |
+| **1** | 아키텍처 정의 | 타입 체크, 구조 검증         | 라우팅 구조, 타입 정의, DB 스키마 |
+| **2** | UI/UX 확정    | 시각적 검증, 반응형 테스트   | 모든 페이지 UI (더미 데이터)      |
+| **3** | 비즈니스 로직 | E2E 테스트 (Playwright)      | API, 데이터 흐름, 상태 관리       |
+| **4** | 성능 & 안정성 | 성능 프로파일링, 배포 테스트 | 최적화된 배포 가능 버전           |
 
 ---
 
@@ -97,6 +101,7 @@
 **목표**: Next.js 15 App Router 기반 전체 페이지 구조 정의
 
 **구현 사항**:
+
 - 8개 라우트 페이지의 빈 틀 생성 (`layout.tsx`, `page.tsx` 포함)
   - `/` (홈)
   - `/login` (로그인, 비로그인만)
@@ -111,11 +116,13 @@
 - 미들웨어 기본 구조 (인증 리다이렉션)
 
 **기술 결정사항**:
+
 - App Router 사용 (기존 Pages Router 대비 더 강력한 타입 안전성)
 - 라우트 그룹(`(auth)`, `(protected)`, `(public)`)으로 레이아웃 분리
 - 미들웨어로 보호된 페이지 접근 제어
 
 **파일 구조**:
+
 ```
 src/
 ├── app/
@@ -145,20 +152,24 @@ src/
 ## 테스트 체크리스트
 
 ### 구조 검증
+
 - [ ] 8개 라우트 페이지 생성: `npm run dev`로 각 라우트 접속 시 에러 없이 렌더링 확인
 - [ ] 공통 레이아웃 정상: 헤더, 사이드바, 푸터 모든 페이지에 표시 확인
 - [ ] 라우트 그룹 적용: (auth), (protected), (public) 레이아웃 분리 확인
 
 ### 타입 검증
+
 - [ ] TypeScript 컴파일: `npm run build` 성공 (타입 에러 없음)
 - [ ] ESLint 검사: `npm run lint` 통과
 - [ ] Prettier 포맷: `npm run format` 적용 후 재검사 통과
 
 ### 미들웨어 검증
+
 - [ ] 보호된 페이지 접근: 비로그인 상태에서 `/dashboard` 접속 시 `/login`으로 리다이렉트 확인
 - [ ] 공개 페이지: `/` 및 `/view/[token]` 비로그인 상태에서 접근 가능 확인
 
 **체크리스트**:
+
 - [ ] 8개 라우트 페이지 빈 틀 생성 (에러 없이 렌더링)
 - [ ] 공통 레이아웃 구조 정의 (헤더, 사이드바 등)
 - [ ] 라우트 보호 미들웨어 기본 구조 작성
@@ -172,6 +183,7 @@ src/
 **목표**: 타입 안전하고 검증 가능한 데이터 구조 정의
 
 **구현 사항**:
+
 1. **TypeScript 타입 정의** (`src/lib/types/`)
    - `Freelancer` (프리랜서)
    - `Invoice` (견적서)
@@ -193,11 +205,13 @@ src/
    - 빌드 시 환경변수 유효성 확인
 
 **기술 결정사항**:
+
 - `export type` (타입만 export, 런타임 오버헤드 없음)
 - Zod의 `.parse()`와 `.safeParse()` 구분 사용
 - 서버 액션에서는 `safeParse()` 사용 (에러 핸들링)
 
 **파일 구조**:
+
 ```
 src/lib/
 ├── types/
@@ -215,53 +229,59 @@ src/lib/
 ```
 
 **예시** (타입 정의):
+
 ```typescript
 // src/lib/types/invoice.ts
 export type Invoice = {
-  id: string;
-  freelancer_id: string;
-  notion_url: string;
-  client_name: string;
-  client_email: string;
-  client_company?: string;
-  status: 'draft' | 'sent' | 'approved' | 'rejected';
-  share_token: string;
-  total_amount: number;
-  created_at: Date;
-  updated_at: Date;
-  expires_at: Date;
-};
+  id: string
+  freelancer_id: string
+  notion_url: string
+  client_name: string
+  client_email: string
+  client_company?: string
+  status: 'draft' | 'sent' | 'approved' | 'rejected'
+  share_token: string
+  total_amount: number
+  created_at: Date
+  updated_at: Date
+  expires_at: Date
+}
 ```
 
 **예시** (Zod 스키마):
+
 ```typescript
 // src/lib/schemas/invoice.ts
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const invoiceSchema = z.object({
   client_name: z.string().min(1, '클라이언트 이름 필수'),
   client_email: z.string().email('유효한 이메일 주소 필요'),
   client_company: z.string().optional(),
-});
+})
 ```
 
 ## 테스트 체크리스트
 
 ### 타입 정의 검증
+
 - [ ] TypeScript strict mode 통과: `tsc --noEmit` 성공 (에러 0개)
 - [ ] IDE 자동완성: VSCode에서 `Invoice.` 입력 시 모든 필드 자동완성 동작 확인
 - [ ] 타입 안전성: 잘못된 타입 할당 시 TypeScript 컴파일 에러 발생 확인
 
 ### Zod 스키마 검증
+
 - [ ] 스키마 파싱 성공: 유효한 데이터 `parse()` 성공 확인
 - [ ] 스키마 검증 실패: 유효하지 않은 데이터 `safeParse()` 에러 반환 확인
 - [ ] 에러 메시지: 검증 실패 시 명확한 에러 메시지 표시
 
 ### 환경변수 검증
+
 - [ ] 환경변수 로드: `src/lib/env.ts` 성공적으로 로드 및 타입 지정
 - [ ] 빌드 시 검증: `npm run build` 시 필수 환경변수 누락 시 빌드 실패 확인
 
 **체크리스트**:
+
 - [ ] 모든 데이터 모델 타입 정의 완료
 - [ ] Zod 스키마 작성 및 테스트
 - [ ] 환경변수 검증 설정 (`src/lib/env.ts`)
@@ -275,12 +295,14 @@ export const invoiceSchema = z.object({
 **목표**: PostgreSQL 스키마 정의 및 Supabase 프로젝트 초기화
 
 **구현 사항**:
+
 1. **Supabase 프로젝트 생성 및 설정**
    - 프로젝트 생성 (리전: ap-northeast-1)
    - Auth 설정 (이메일/비밀번호 인증)
    - Row Level Security (RLS) 정책 수립
 
 2. **PostgreSQL 테이블 생성** (SQL 마이그레이션)
+
    ```sql
    -- 1. freelancers 테이블
    CREATE TABLE freelancers (
@@ -340,6 +362,7 @@ export const invoiceSchema = z.object({
    - `src/lib/supabase/server.ts` (서버 액션 사용)
 
 **기술 결정사항**:
+
 - UUID 기본키 사용 (성능 + 보안)
 - `created_at`, `updated_at` 자동 관리 (트리거 또는 애플리케이션)
 - `expires_at` 필드로 공유 링크 만료 관리
@@ -347,22 +370,26 @@ export const invoiceSchema = z.object({
 ## 테스트 체크리스트
 
 ### 데이터베이스 생성 검증
+
 - [ ] 테이블 생성 성공: Supabase 대시보드에서 4개 테이블 확인
 - [ ] 스키마 정확성: 각 테이블의 컬럼, 타입, 제약조건 검증
 - [ ] 외래키 제약: `invoice_items.invoice_id` → `invoices.id` 관계 확인
 - [ ] 기본값 설정: `created_at`, `updated_at`, `expires_at` 기본값 정상 작동
 
 ### RLS 정책 검증
+
 - [ ] 프리랜서 데이터: 사용자가 자신의 freelancers 행만 조회/수정 가능 확인
 - [ ] 견적서 데이터: 프리랜서가 자신의 invoices만 조회 가능, 다른 사용자는 접근 불가
 - [ ] 공개 데이터: invoice_responses 모든 사용자 읽기 가능 (토큰 검증 애플리케이션 레벨)
 
 ### 클라이언트 라이브러리 검증
+
 - [ ] 클라이언트 연결: `src/lib/supabase/client.ts` 정상 작동
 - [ ] 서버 연결: `src/lib/supabase/server.ts` 정상 작동
 - [ ] 환경변수: `SUPABASE_URL`, `SUPABASE_ANON_KEY` 설정 및 로드 확인
 
 **체크리스트**:
+
 - [ ] Supabase 프로젝트 생성 및 API 키 발급
 - [ ] 4개 테이블 생성 (freelancers, invoices, invoice_items, invoice_responses)
 - [ ] RLS 정책 설정 및 테스트
@@ -382,7 +409,9 @@ export const invoiceSchema = z.object({
 **목표**: shadcn/ui 기반 프로젝트 전용 컴포넌트 라이브러리 구축
 
 **구현 사항**:
+
 1. **shadcn/ui 컴포넌트 설치**
+
    ```bash
    npx shadcn-ui@latest add button
    npx shadcn-ui@latest add input
@@ -419,6 +448,7 @@ export const invoiceSchema = z.object({
    - 아이콘 크기/색상 통일
 
 **파일 구조**:
+
 ```
 src/components/
 ├── common/
@@ -444,22 +474,26 @@ src/components/
 ## 테스트 체크리스트 (UI 시각적 검증)
 
 ### 컴포넌트 검증
+
 - [ ] shadcn/ui 컴포넌트 설치: 15개 이상 설치 확인 (`npm list`)
 - [ ] 커스텀 컴포넌트 작성: Header, Sidebar, InvoiceTable 등 정상 렌더링
 - [ ] 컴포넌트 재사용: 각 컴포넌트가 여러 페이지에서 일관되게 렌더링
 
 ### 반응형 디자인 검증
+
 - [ ] 모바일 (375px): 테이블 → 카드 레이아웃 변환, 스크롤 정상
 - [ ] 태블릿 (768px): 2칼럼 레이아웃 확인
 - [ ] 데스크톱 (1280px): 풀 레이아웃 확인
 - [ ] 터치 영역: 버튼 최소 44px, 터치 패드 정상
 
 ### 디자인 일관성 검증
+
 - [ ] 컬러 스키마: primary, success, danger, warning 모든 페이지 일관 적용
 - [ ] 타이포그래피: 폰트 크기/가중치 일관성 (h1, h2, body 등)
 - [ ] 간격: 패딩, 마진 일관성 (8px 단위)
 
 **체크리스트**:
+
 - [ ] shadcn/ui 15+ 컴포넌트 설치
 - [ ] 프로젝트 커스텀 컴포넌트 10개 이상 작성
 - [ ] 반응형 디자인 테스트 (모바일, 태블릿, 데스크톱)
@@ -473,6 +507,7 @@ src/components/
 **목표**: Supabase Auth 연동 전 UI/UX 완성
 
 **구현 사항**:
+
 1. **로그인 페이지** (`/login`)
    - 이메일 입력 필드 (검증)
    - 비밀번호 입력 필드 (표시/숨김 토글)
@@ -492,6 +527,7 @@ src/components/
    - "로그인" 링크
 
 **디자인 가이드라인**:
+
 - 중앙 정렬 레이아웃
 - 카드 컴포넌트 사용
 - 폼 검증 에러 인라인 표시
@@ -500,24 +536,28 @@ src/components/
 ## 테스트 체크리스트 (UI 기능 테스트)
 
 ### 로그인 페이지 테스트
+
 - [ ] 폼 입력: 이메일/비밀번호 입력 필드 정상 작동
 - [ ] 검증 UI: 이메일 형식 오류 시 인라인 에러 메시지 표시
 - [ ] 비밀번호 토글: "표시/숨김" 토글 정상 작동
 - [ ] 에러 상태: 에러 발생 시 배경색/테두리 변경 시각화
 
 ### 회원가입 페이지 테스트
+
 - [ ] 모든 필드 입력: name, email, password, password_confirm, company_name (선택)
 - [ ] 비밀번호 확인: password !== password_confirm 시 에러 메시지 표시
 - [ ] 약관 동의: 체크박스 클릭 시 상태 변경
 - [ ] CTA 버튼: "회원가입" 버튼 활성/비활성 상태 구분
 
 ### 반응형 및 접근성 테스트
+
 - [ ] 모바일 (375px): 폼 필드 전체 표시, 스크롤 정상
 - [ ] label 태그: 각 입력 필드마다 연관된 label 확인
 - [ ] aria 속성: aria-label, aria-required, aria-invalid 설정 확인
 - [ ] 키보드 네비게이션: Tab 키로 순서대로 포커스 이동
 
 **체크리스트**:
+
 - [ ] 로그인 페이지 UI 완성 (더미 상태)
 - [ ] 회원가입 페이지 UI 완성 (더미 상태)
 - [ ] 반응형 디자인 확인
@@ -558,6 +598,7 @@ src/components/
    - "취소" 버튼
 
 **더미 데이터**:
+
 ```typescript
 const dummyInvoices = [
   {
@@ -569,16 +610,17 @@ const dummyInvoices = [
     sentAt: new Date('2024-06-15'),
     items: [
       { title: 'UI 디자인', quantity: 40, unitPrice: 100000 },
-      { title: '프론트엔드 개발', quantity: 80, unitPrice: 100000 }
-    ]
+      { title: '프론트엔드 개발', quantity: 80, unitPrice: 100000 },
+    ],
   },
   // ...
-];
+]
 ```
 
 ## 테스트 체크리스트 (UI 기능 + 반응형 테스트)
 
 ### 대시보드 페이지 테스트
+
 - [ ] 테이블 렌더링: 필드명, 데이터 행 모두 정상 표시
 - [ ] 필터 탭: "전체", "발송 대기", "승인", "거절", "보류" 클릭 시 필터링 UI 변경
 - [ ] 행 클릭: 각 행 클릭 시 상세 페이지로 이동
@@ -587,6 +629,7 @@ const dummyInvoices = [
 - [ ] 빈 상태: 견적서 없을 때 빈 상태 메시지 표시
 
 ### 견적서 작성 페이지 테스트
+
 - [ ] URL 입력: 노션 URL 입력 필드 정상 작동
 - [ ] URL 검증 메시지: 형식 오류 시 명확한 가이드 메시지
 - [ ] Integration 가이드: "Integration 연결 방법" UI 고정 표시
@@ -594,6 +637,7 @@ const dummyInvoices = [
 - [ ] 에러 메시지: 임포트 실패 시 해결 방법 포함된 에러 메시지
 
 ### 견적서 상세 페이지 테스트
+
 - [ ] 읽기 모드: 견적서 정보 읽기 전용 표시
 - [ ] 항목 테이블: title, description, quantity, unit_price, amount 모두 표시
 - [ ] 클라이언트 정보 입력: name, email, company_name 필드 정상 작동
@@ -602,11 +646,13 @@ const dummyInvoices = [
 - [ ] 편집 모드: 클라이언트 정보 인라인 편집 가능
 
 ### 반응형 디자인 테스트
+
 - [ ] 모바일 (375px): 테이블 → 카드 레이아웃 변환, 스크롤 정상
 - [ ] 태블릿 (768px): 2칼럼 또는 스택 레이아웃
 - [ ] 데스크톱: 풀 테이블 표시
 
 **체크리스트**:
+
 - [ ] 대시보드 페이지 UI 완성 (테이블, 필터, CTA)
 - [ ] 견적서 작성 페이지 UI 완성 (폼, 로딩, 에러)
 - [ ] 견적서 상세 페이지 UI 완성 (읽기/편집 모드)
@@ -646,6 +692,7 @@ const dummyInvoices = [
    - "제출" 버튼
 
 **더미 시나리오**:
+
 ```typescript
 // 성공 시나리오
 const dummyInvoiceView = {
@@ -667,6 +714,7 @@ const unauthorized = { error: 'INVALID_TOKEN', message: '유효하지 않은 링
 ## 테스트 체크리스트 (UI 기능 + 오류 시나리오)
 
 ### 견적서 뷰 페이지 테스트
+
 - [ ] 프리랜서 정보: 이름, 회사명, 연락처 카드 표시
 - [ ] 견적서 내용: 제목, 항목 테이블, 총액 모두 정상 표시
 - [ ] 발행일/유효기간: 있으면 표시 확인
@@ -675,33 +723,39 @@ const unauthorized = { error: 'INVALID_TOKEN', message: '유효하지 않은 링
 - [ ] 거절 버튼 클릭: 모달/텍스트 입력창 표시
 
 ### 거절 모달 테스트
+
 - [ ] 모달 표시: 거절 버튼 클릭 시 모달 팝업
 - [ ] 텍스트 입력: 사유 입력 필드 정상 작동
 - [ ] 제출 버튼: "제출" 클릭 시 응답 완료 페이지로 이동
 
 ### 응답 완료 페이지 테스트
+
 - [ ] 상태 메시지: "승인했습니다", "거절했습니다", "보류 상태" 등 상태별 메시지
 - [ ] 타임스탐프: 응답 일시 표시
 - [ ] 거절 사유: 거절 시에만 사유 표시
 - [ ] 닫기 버튼: 클릭 시 탭/페이지 닫기 또는 이전 페이지 이동
 
 ### 에러 화면 테스트
+
 - [ ] 토큰 만료 (30일 초과): "이 링크는 만료되었습니다" 에러 메시지
 - [ ] 유효하지 않은 토큰: "유효하지 않은 링크입니다" 에러 메시지
 - [ ] 권한 없음: 접근 불가 에러 메시지 (필요 시)
 - [ ] 에러 화면 UI: 명확한 메시지, 홈으로 돌아가기 버튼
 
 ### 반응형 디자인 테스트
+
 - [ ] 모바일 (375px): 카드 레이아웃, 세로 스택
 - [ ] 태블릿 (768px): 2칼럼 또는 조정된 레이아웃
 - [ ] 데스크톱: 풀 레이아웃
 
 ### 프린트 스타일 테스트
+
 - [ ] 브라우저 프린트: Ctrl+P 시 견적서 레이아웃 유지
 - [ ] 페이지 나누기: 긴 항목 테이블이 여러 페이지로 나뉨
 - [ ] 색상 제거: 프린트 시 그레이스케일에서도 가독성 유지
 
 **체크리스트**:
+
 - [ ] 견적서 뷰 페이지 UI 완성 (상태별 버튼 4개)
 - [ ] 거절 모달 UI (텍스트 입력)
 - [ ] 응답 완료 페이지 UI
@@ -749,91 +803,98 @@ const unauthorized = { error: 'INVALID_TOKEN', message: '유효하지 않은 링
    - 네트워크 에러
 
 **코드 예시**:
+
 ```typescript
 // src/app/actions/auth.ts
-'use server';
+'use server'
 
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/server'
 
 export async function signUpAction(formData: FormData) {
-  const supabase = createClient();
-  
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
-  const name = formData.get('name') as string;
-  const companyName = formData.get('company_name') as string;
+  const supabase = createClient()
+
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
+  const name = formData.get('name') as string
+  const companyName = formData.get('company_name') as string
 
   // 1. Supabase Auth에 사용자 생성
-  const { data: { user }, error: authError } = await supabase.auth.signUp({
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.signUp({
     email,
-    password
-  });
+    password,
+  })
 
-  if (authError) throw new Error(authError.message);
+  if (authError) throw new Error(authError.message)
 
   // 2. freelancers 테이블에 정보 저장
-  const { error: dbError } = await supabase
-    .from('freelancers')
-    .insert({
-      id: user!.id,
-      email,
-      name,
-      company_name: companyName || null
-    });
+  const { error: dbError } = await supabase.from('freelancers').insert({
+    id: user!.id,
+    email,
+    name,
+    company_name: companyName || null,
+  })
 
-  if (dbError) throw new Error(dbError.message);
+  if (dbError) throw new Error(dbError.message)
 
   // 3. 로그인 페이지로 리다이렉트
-  redirect('/login');
+  redirect('/login')
 }
 ```
 
 ## 테스트 체크리스트
 
 ### Happy Path (정상 케이스)
+
 - [ ] 회원가입 성공: 유효한 이메일/비밀번호 입력 후 freelancers 테이블 데이터 저장 확인
 - [ ] 로그인 성공: 등록된 계정으로 로그인 후 대시보드 접근 확인
 - [ ] 로그아웃 성공: 세션 삭제되고 로그인 페이지로 리다이렉트 확인
 
 ### Error Case (오류 케이스)
+
 - [ ] 이메일 중복 처리: 기존 이메일로 가입 시 에러 메시지 표시
 - [ ] 비밀번호 불일치: 로그인 실패 시 명확한 에러 메시지 표시
 - [ ] 인증 토큰 만료: 세션 만료 시 로그인 페이지로 자동 리다이렉트
 
 ### 검증 항목
+
 - [ ] 인증된 사용자만 보호된 페이지 (`/dashboard`, `/invoices`) 접근 가능
 - [ ] 비인증 사용자 자동 리다이렉트 (미들웨어)
 - [ ] 브라우저 콘솔 에러 없음 (Playwright MCP로 확인)
 - [ ] API 응답 상태코드 정상 (200, 401, 403 등)
 
 **Playwright E2E 테스트** (`e2e/auth.spec.ts`):
+
 ```typescript
 test('회원가입 및 로그인 플로우', async ({ page }) => {
   // 1. 회원가입 페이지 접속
-  await page.goto('/signup');
-  
+  await page.goto('/signup')
+
   // 2. 폼 작성
-  await page.fill('input[name="email"]', 'test@example.com');
-  await page.fill('input[name="password"]', 'password123');
-  await page.fill('input[name="name"]', 'Test User');
-  
+  await page.fill('input[name="email"]', 'test@example.com')
+  await page.fill('input[name="password"]', 'password123')
+  await page.fill('input[name="name"]', 'Test User')
+
   // 3. 회원가입 버튼 클릭
-  await page.click('button:has-text("회원가입")');
-  
+  await page.click('button:has-text("회원가입")')
+
   // 4. 로그인 페이지로 리다이렉트 확인
-  await expect(page).toHaveURL('/login');
-  
+  await expect(page).toHaveURL('/login')
+
   // 5. 로그인
-  await page.fill('input[name="email"]', 'test@example.com');
-  await page.fill('input[name="password"]', 'password123');
-  await page.click('button:has-text("로그인")');
-  
+  await page.fill('input[name="email"]', 'test@example.com')
+  await page.fill('input[name="password"]', 'password123')
+  await page.click('button:has-text("로그인")')
+
   // 6. 대시보드로 리다이렉트 확인
-  await expect(page).toHaveURL('/dashboard');
-});
+  await expect(page).toHaveURL('/dashboard')
+})
 ```
 
 **체크리스트**:
+
 - [ ] Supabase Auth 이메일/비밀번호 인증 설정
 - [ ] 회원가입/로그인/로그아웃 Server Actions 구현
 - [ ] 미들웨어 인증 제어 설정
@@ -881,6 +942,7 @@ test('회원가입 및 로그인 플로우', async ({ page }) => {
    - 429 에러 재시도
 
 **코드 구조**:
+
 ```
 src/lib/notion/
 ├── client.ts (Notion API 클라이언트)
@@ -892,6 +954,7 @@ src/lib/notion/
 ```
 
 **API 호출 시퀀스**:
+
 ```
 1. pages.retrieve(pageId)
    → response: { id, properties: { title, ... } }
@@ -906,6 +969,7 @@ src/lib/notion/
 ```
 
 **데이터 변환 예**:
+
 ```typescript
 // Notion 응답
 {
@@ -927,16 +991,17 @@ src/lib/notion/
 ```
 
 **서버 액션** (`src/app/actions/invoice.ts`):
-```typescript
-'use server';
 
-import { fetchInvoiceFromNotion } from '@/lib/notion';
+```typescript
+'use server'
+
+import { fetchInvoiceFromNotion } from '@/lib/notion'
 
 export async function importInvoiceAction(notionUrl: string) {
   // 1. URL 검증
   // 2. Notion API 호출
-  const data = await fetchInvoiceFromNotion(notionUrl);
-  
+  const data = await fetchInvoiceFromNotion(notionUrl)
+
   // 3. Supabase에 저장 (Task 010)
   // ...
 }
@@ -945,24 +1010,28 @@ export async function importInvoiceAction(notionUrl: string) {
 ## 테스트 체크리스트
 
 ### Happy Path (정상 케이스)
+
 - [ ] URL 파싱 성공: 정상 노션 URL에서 UUID 추출 및 변환 확인
 - [ ] Notion API 호출: 3단계 API 호출 성공 및 데이터 추출 확인
 - [ ] 테이블 파싱: 헤더/데이터 행 분리, 항목 정보 추출 확인
 - [ ] 금액 계산: 총액 계산 정확성 확인
 
 ### Error Case (오류 케이스)
+
 - [ ] 잘못된 URL 파싱: 유효하지 않은 URL 형식 처리 확인
 - [ ] 권한 없음 (403): Integration 미연결 시 명확한 에러 메시지 표시
 - [ ] Rate Limit (429): exponential backoff로 재시도 및 성공 확인
 - [ ] 네트워크 오류: 타임아웃/연결 오류 시 적절한 에러 처리
 
 ### 검증 항목
-- [ ] 브라우저 콘솔에 에러 로그 없음 (mcp__playwright__browser_console_messages)
+
+- [ ] 브라우저 콘솔에 에러 로그 없음 (mcp**playwright**browser_console_messages)
 - [ ] Notion API 응답 코드 정상 (200, 400, 403, 429 등 처리)
 - [ ] 로딩 UI 정상 표시 (진행률 또는 스핀 애니메이션)
 - [ ] 에러 메시지 사용자 친화적이고 해결 방법 제시
 
 **Playwright E2E 테스트** (`e2e/notion-import.spec.ts`):
+
 ```typescript
 test('노션 URL 임포트 성공', async ({ page }) => {
   // 1. 견적서 작성 페이지 접속
@@ -971,16 +1040,17 @@ test('노션 URL 임포트 성공', async ({ page }) => {
   // 4. 로딩 표시 확인
   // 5. 견적서 상세 페이지 리다이렉트 확인
   // 6. 임포트된 데이터 표시 확인
-});
+})
 
 test('노션 URL 임포트 실패 - 권한 없음', async ({ page }) => {
   // 1. 잘못된 URL 입력
   // 2. "임포트" 클릭
   // 3. 에러 메시지 표시 확인
-});
+})
 ```
 
 **체크리스트**:
+
 - [ ] `@notionhq/client` 설치 및 설정
 - [ ] Notion URL 파싱 함수 구현
 - [ ] 3단계 API 호출 구현
@@ -1021,6 +1091,7 @@ test('노션 URL 임포트 실패 - 권한 없음', async ({ page }) => {
    - `expires_at` 30일 후 설정
 
 **코드 구조**:
+
 ```
 src/app/actions/
 ├── invoice.ts (CRUD)
@@ -1029,20 +1100,19 @@ src/app/actions/
 ```
 
 **예시**:
+
 ```typescript
 // src/app/actions/invoice.ts
-'use server';
+'use server'
 
-import { getCurrentUser } from '@/app/actions/auth';
-import { createClient } from '@/lib/supabase/server';
+import { getCurrentUser } from '@/app/actions/auth'
+import { createClient } from '@/lib/supabase/server'
 
-export async function createInvoiceAction(
-  invoiceData: CreateInvoiceInput
-) {
-  const user = await getCurrentUser();
-  if (!user) throw new Error('인증 필요');
+export async function createInvoiceAction(invoiceData: CreateInvoiceInput) {
+  const user = await getCurrentUser()
+  if (!user) throw new Error('인증 필요')
 
-  const supabase = createClient();
+  const supabase = createClient()
 
   // 1. invoices 테이블에 행 생성
   const { data: invoice, error: invoiceError } = await supabase
@@ -1056,34 +1126,32 @@ export async function createInvoiceAction(
       status: 'draft',
       share_token: crypto.randomUUID(),
       total_amount: invoiceData.total_amount,
-      expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+      expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     })
     .select()
-    .single();
+    .single()
 
-  if (invoiceError) throw new Error(invoiceError.message);
+  if (invoiceError) throw new Error(invoiceError.message)
 
   // 2. invoice_items 배열 삽입
-  const { error: itemsError } = await supabase
-    .from('invoice_items')
-    .insert(
-      invoiceData.items.map((item, idx) => ({
-        invoice_id: invoice.id,
-        ...item,
-        order: idx
-      }))
-    );
+  const { error: itemsError } = await supabase.from('invoice_items').insert(
+    invoiceData.items.map((item, idx) => ({
+      invoice_id: invoice.id,
+      ...item,
+      order: idx,
+    }))
+  )
 
-  if (itemsError) throw new Error(itemsError.message);
+  if (itemsError) throw new Error(itemsError.message)
 
-  return invoice;
+  return invoice
 }
 
 export async function getInvoiceAction(invoiceId: string) {
-  const user = await getCurrentUser();
-  if (!user) throw new Error('인증 필요');
+  const user = await getCurrentUser()
+  if (!user) throw new Error('인증 필요')
 
-  const supabase = createClient();
+  const supabase = createClient()
 
   // 1. 견적서 조회 (소유자 확인)
   const { data: invoice, error: invoiceError } = await supabase
@@ -1091,39 +1159,40 @@ export async function getInvoiceAction(invoiceId: string) {
     .select('*, invoice_items(*), invoice_responses(*)')
     .eq('id', invoiceId)
     .eq('freelancer_id', user.id)
-    .single();
+    .single()
 
-  if (invoiceError) throw new Error(invoiceError.message);
+  if (invoiceError) throw new Error(invoiceError.message)
 
-  return invoice;
+  return invoice
 }
 
 export async function listInvoicesAction(status?: string) {
-  const user = await getCurrentUser();
-  if (!user) throw new Error('인증 필요');
+  const user = await getCurrentUser()
+  if (!user) throw new Error('인증 필요')
 
-  const supabase = createClient();
+  const supabase = createClient()
 
   let query = supabase
     .from('invoices')
     .select('*, invoice_items(*), invoice_responses(*)')
-    .eq('freelancer_id', user.id);
+    .eq('freelancer_id', user.id)
 
   if (status) {
-    query = query.eq('status', status);
+    query = query.eq('status', status)
   }
 
-  const { data, error } = await query.order('created_at', { ascending: false });
+  const { data, error } = await query.order('created_at', { ascending: false })
 
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(error.message)
 
-  return data;
+  return data
 }
 ```
 
 ## 테스트 체크리스트
 
 ### Happy Path (정상 케이스)
+
 - [ ] 견적서 생성: invoices + invoice_items 함께 저장되고 ID 반환 확인
 - [ ] 견적서 단일 조회: 소유자만 데이터 조회 가능 확인
 - [ ] 견적서 목록 조회: 사용자의 모든 견적서 반환 및 정렬 확인
@@ -1132,18 +1201,21 @@ export async function listInvoicesAction(status?: string) {
 - [ ] 견적서 삭제: 관련 invoice_items 함께 삭제 확인
 
 ### Error Case (오류 케이스)
+
 - [ ] 권한 없음 (403): 다른 사용자의 견적서 접근 차단 확인
 - [ ] 존재하지 않는 ID (404): 404 에러 반환 확인
 - [ ] 데이터 검증 실패: 필수 필드 누락 시 에러 메시지 표시
 - [ ] 트랜잭션 실패: 부분 저장 방지 (전체 롤백)
 
 ### 검증 항목
+
 - [ ] Supabase RLS 정책 정상 작동 (행 단위 접근 제어)
 - [ ] 관계형 데이터 삭제 정상 (외래키 제약)
-- [ ] 콘솔 에러 없음 (mcp__playwright__browser_console_messages)
+- [ ] 콘솔 에러 없음 (mcp**playwright**browser_console_messages)
 - [ ] API 응답 시간 1초 이내 (성능 기준)
 
 **Playwright E2E 테스트** (`e2e/invoice-crud.spec.ts`):
+
 ```typescript
 test('견적서 생성 → 조회 → 수정 → 발송 플로우', async ({ page }) => {
   // 1. 로그인
@@ -1153,10 +1225,11 @@ test('견적서 생성 → 조회 → 수정 → 발송 플로우', async ({ pag
   // 5. 클라이언트 정보 입력
   // 6. "저장" 또는 "발송" 클릭
   // 7. 견적서 목록 확인 (생성된 항목 표시)
-});
+})
 ```
 
 **체크리스트**:
+
 - [ ] CRUD 함수 5개 구현 (Create, Read, Update, Delete, List)
 - [ ] 소유자 확인 로직 (RLS로 백업)
 - [ ] 오류 처리 (404, 403, 데이터 검증)
@@ -1196,12 +1269,13 @@ test('견적서 생성 → 조회 → 수정 → 발송 플로우', async ({ pag
    - 토스트 알림 표시
 
 **코드 구조**:
+
 ```typescript
 // src/app/actions/invoice-response.ts
-'use server';
+'use server'
 
-import { createClient } from '@/lib/supabase/server';
-import { getCurrentUser } from './auth';
+import { createClient } from '@/lib/supabase/server'
+import { getCurrentUser } from './auth'
 
 export async function respondToInvoiceAction(
   shareToken: string,
@@ -1209,18 +1283,18 @@ export async function respondToInvoiceAction(
   notes?: string
 ) {
   // 1. 토큰 검증
-  const supabase = createClient();
+  const supabase = createClient()
   const { data: invoice, error: invoiceError } = await supabase
     .from('invoices')
     .select('id, expires_at')
     .eq('share_token', shareToken)
-    .single();
+    .single()
 
-  if (invoiceError) throw new Error('유효하지 않은 링크');
+  if (invoiceError) throw new Error('유효하지 않은 링크')
 
   // 만료 확인
   if (new Date(invoice.expires_at) < new Date()) {
-    throw new Error('만료된 링크입니다');
+    throw new Error('만료된 링크입니다')
   }
 
   // 2. 응답 저장 또는 업데이트
@@ -1230,30 +1304,30 @@ export async function respondToInvoiceAction(
       invoice_id: invoice.id,
       status,
       notes: notes || null,
-      responded_at: new Date()
-    });
+      responded_at: new Date(),
+    })
 
-  if (responseError) throw new Error(responseError.message);
+  if (responseError) throw new Error(responseError.message)
 
   // 3. 견적서 상태도 업데이트 (선택)
   if (status === 'approved') {
     await supabase
       .from('invoices')
       .update({ status: 'approved' })
-      .eq('id', invoice.id);
+      .eq('id', invoice.id)
   } else if (status === 'rejected') {
     await supabase
       .from('invoices')
       .update({ status: 'rejected' })
-      .eq('id', invoice.id);
+      .eq('id', invoice.id)
   }
 }
 
 export async function sendInvoiceAction(invoiceId: string) {
-  const user = await getCurrentUser();
-  if (!user) throw new Error('인증 필요');
+  const user = await getCurrentUser()
+  if (!user) throw new Error('인증 필요')
 
-  const supabase = createClient();
+  const supabase = createClient()
 
   // 1. 견적서 조회
   const { data: invoice, error: invoiceError } = await supabase
@@ -1261,52 +1335,54 @@ export async function sendInvoiceAction(invoiceId: string) {
     .select('*')
     .eq('id', invoiceId)
     .eq('freelancer_id', user.id)
-    .single();
+    .single()
 
-  if (invoiceError) throw new Error(invoiceError.message);
+  if (invoiceError) throw new Error(invoiceError.message)
 
   // 2. 상태 업데이트
   const { error: updateError } = await supabase
     .from('invoices')
     .update({ status: 'sent', updated_at: new Date() })
-    .eq('id', invoiceId);
+    .eq('id', invoiceId)
 
-  if (updateError) throw new Error(updateError.message);
+  if (updateError) throw new Error(updateError.message)
 
   // 3. 이메일 발송 (Task 012)
-  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/view/${invoice.share_token}`;
-  await sendInvoiceEmailAction(invoice.client_email, shareUrl);
+  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/view/${invoice.share_token}`
+  await sendInvoiceEmailAction(invoice.client_email, shareUrl)
 
-  return { success: true, shareUrl };
+  return { success: true, shareUrl }
 }
 ```
 
 **토큰 검증 로직**:
+
 ```typescript
 export async function validateShareTokenAction(shareToken: string) {
-  const supabase = createClient();
+  const supabase = createClient()
 
   const { data: invoice, error } = await supabase
     .from('invoices')
     .select('id, freelancer_id, expires_at')
     .eq('share_token', shareToken)
-    .single();
+    .single()
 
   if (error || !invoice) {
-    return { valid: false, error: 'INVALID_TOKEN' };
+    return { valid: false, error: 'INVALID_TOKEN' }
   }
 
   if (new Date(invoice.expires_at) < new Date()) {
-    return { valid: false, error: 'TOKEN_EXPIRED' };
+    return { valid: false, error: 'TOKEN_EXPIRED' }
   }
 
-  return { valid: true, invoiceId: invoice.id };
+  return { valid: true, invoiceId: invoice.id }
 }
 ```
 
 ## 테스트 체크리스트
 
 ### Happy Path (정상 케이스)
+
 - [ ] 견적서 발송 성공: 상태 draft → sent 변경, 공유 링크 생성 확인
 - [ ] 토큰 유효성 검증: 유효한 토큰으로 견적서 접근 가능 확인
 - [ ] 클라이언트 승인: 응답 저장되고 상태 업데이트 확인
@@ -1315,18 +1391,21 @@ export async function validateShareTokenAction(shareToken: string) {
 - [ ] 프리랜서 대시보드 실시간 상태 반영 (<1분)
 
 ### Error Case (오류 케이스)
+
 - [ ] 토큰 만료 (30일 초과): "만료된 링크" 에러 메시지 표시
 - [ ] 유효하지 않은 토큰: "유효하지 않은 링크" 에러 메시지 표시
 - [ ] 중복 응답: 이미 응답한 경우 덮어쓰기 또는 경고 표시
 - [ ] 잘못된 상태값: 유효하지 않은 상태 입력 시 에러 처리
 
 ### 검증 항목
+
 - [ ] 공유 링크 URL 형식 정확 (`/view/[uuid]`)
 - [ ] 토큰 검증 성능 <500ms (데이터베이스 쿼리)
-- [ ] 콘솔 에러 없음 (mcp__playwright__browser_console_messages)
-- [ ] 네트워크 요청 정상 (mcp__playwright__browser_network_requests)
+- [ ] 콘솔 에러 없음 (mcp**playwright**browser_console_messages)
+- [ ] 네트워크 요청 정상 (mcp**playwright**browser_network_requests)
 
 **Playwright E2E 테스트** (`e2e/share-invoice.spec.ts`):
+
 ```typescript
 test('견적서 발송 및 클라이언트 응답', async ({ page, context }) => {
   // 1. 프리랜서 로그인 및 견적서 발송
@@ -1337,10 +1416,11 @@ test('견적서 발송 및 클라이언트 응답', async ({ page, context }) =>
   // 6. 응답 완료 페이지 확인
   // 7. 프리랜서 탭 새로고침
   // 8. 대시보드에서 상태 "승인" 확인
-});
+})
 ```
 
 **체크리스트**:
+
 - [ ] 견적서 발송 (`sendInvoiceAction`) 구현
 - [ ] 클라이언트 응답 저장 (`respondToInvoiceAction`) 구현
 - [ ] 토큰 검증 로직 구현
@@ -1370,6 +1450,7 @@ test('견적서 발송 및 클라이언트 응답', async ({ page, context }) =>
    - 에러 처리 및 재시도
 
 **이메일 템플릿 예**:
+
 ```html
 <h1>견적서 공유 요청</h1>
 <p>안녕하세요,</p>
@@ -1380,13 +1461,14 @@ test('견적서 발송 및 클라이언트 응답', async ({ page, context }) =>
 ```
 
 **코드 예시** (Resend):
+
 ```typescript
 // src/app/actions/email.ts
-'use server';
+'use server'
 
-import { Resend } from 'resend';
+import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function sendInvoiceEmailAction(
   to: string,
@@ -1403,40 +1485,44 @@ export async function sendInvoiceEmailAction(
       <p>${freelancerName}님에서 견적서를 공유하셨습니다.</p>
       <a href="${shareUrl}">견적서 확인하기</a>
       <p>이 링크는 30일 동안 유효합니다.</p>
-    `
-  });
+    `,
+  })
 
   if (error) {
-    console.error('이메일 발송 실패:', error);
-    throw new Error('이메일 발송 실패');
+    console.error('이메일 발송 실패:', error)
+    throw new Error('이메일 발송 실패')
   }
 
-  return { success: true };
+  return { success: true }
 }
 ```
 
 ## 테스트 체크리스트
 
 ### Happy Path (정상 케이스)
+
 - [ ] 이메일 발송 성공: 클라이언트 이메일 주소로 메일 수신 확인
 - [ ] 이메일 템플릿: HTML 렌더링 정상, 공유 링크 포함 확인
 - [ ] CTA 버튼: 이메일 내 "견적서 확인하기" 버튼 클릭 시 링크 작동 확인
 - [ ] 프리랜서 정보: 이메일에 발신자(프리랜서) 정보 정확히 표시 확인
 
 ### Error Case (오류 케이스)
+
 - [ ] 유효하지 않은 이메일: 형식 검증 후 에러 메시지 표시
 - [ ] 발송 실패 (Resend API 오류): 에러 로깅 및 사용자 알림
 - [ ] 재시도 로직: 일시적 실패 시 자동 재시도 (최대 3회)
 - [ ] 네트워크 오류: 타임아웃 처리 및 폴백 메시지
 
 ### 검증 항목
+
 - [ ] 이메일 템플릿 모바일 반응형 확인
 - [ ] 한글 텍스트 깨짐 없음 (인코딩 확인)
 - [ ] 발송 로그 기록 (문제 추적용)
-- [ ] 콘솔 에러 없음 (mcp__playwright__browser_console_messages)
+- [ ] 콘솔 에러 없음 (mcp**playwright**browser_console_messages)
 - [ ] 발송 시간 <3초 (사용자 경험)
 
 **Playwright E2E 테스트** (`e2e/email.spec.ts`):
+
 ```typescript
 test('견적서 이메일 발송 성공', async ({ page }) => {
   // 1. 견적서 발송 트리거
@@ -1444,10 +1530,11 @@ test('견적서 이메일 발송 성공', async ({ page }) => {
   // 3. 이메일 받음 확인
   // 4. 이메일의 링크 클릭
   // 5. 견적서 뷰 페이지 로드 확인
-});
+})
 ```
 
 **체크리스트**:
+
 - [ ] Resend 또는 Nodemailer 설정
 - [ ] 이메일 템플릿 작성
 - [ ] `sendInvoiceEmailAction()` 구현
@@ -1483,6 +1570,7 @@ test('견적서 이메일 발송 성공', async ({ page }) => {
    - **Scenario 5**: 프리랜서 대시보드에서 응답 상태 확인
 
 **테스트 파일 구조**:
+
 ```
 e2e/
 ├── auth.spec.ts (회원가입, 로그인, 로그아웃)
@@ -1496,108 +1584,111 @@ e2e/
 ```
 
 **테스트 예시**:
+
 ```typescript
 // e2e/full-flow.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
 
 test.describe('전체 사용자 플로우', () => {
   test('프리랜서 → 클라이언트 완전한 플로우', async ({ page }) => {
     // Step 1: 프리랜서 회원가입 및 로그인
-    await page.goto('/signup');
-    await page.fill('input[name="email"]', 'freelancer@test.com');
-    await page.fill('input[name="name"]', 'Test Freelancer');
-    await page.fill('input[name="password"]', 'password123');
-    await page.click('button:has-text("회원가입")');
+    await page.goto('/signup')
+    await page.fill('input[name="email"]', 'freelancer@test.com')
+    await page.fill('input[name="name"]', 'Test Freelancer')
+    await page.fill('input[name="password"]', 'password123')
+    await page.click('button:has-text("회원가입")')
 
-    await expect(page).toHaveURL('/login');
+    await expect(page).toHaveURL('/login')
 
     // Step 2: 노션 URL 임포트
-    await page.fill('input[name="email"]', 'freelancer@test.com');
-    await page.fill('input[name="password"]', 'password123');
-    await page.click('button:has-text("로그인")');
+    await page.fill('input[name="email"]', 'freelancer@test.com')
+    await page.fill('input[name="password"]', 'password123')
+    await page.click('button:has-text("로그인")')
 
-    await expect(page).toHaveURL('/dashboard');
+    await expect(page).toHaveURL('/dashboard')
 
-    await page.click('button:has-text("새 견적서 작성")');
-    await expect(page).toHaveURL('/invoices/new');
+    await page.click('button:has-text("새 견적서 작성")')
+    await expect(page).toHaveURL('/invoices/new')
 
     await page.fill(
       'input[name="notion_url"]',
       'https://www.notion.so/...' // 실제 테스트 URL
-    );
-    await page.click('button:has-text("임포트")');
+    )
+    await page.click('button:has-text("임포트")')
 
     // 로딩 완료 대기
-    await expect(page.locator('text=임포트 완료')).toBeVisible();
+    await expect(page.locator('text=임포트 완료')).toBeVisible()
 
     // Step 3: 클라이언트 정보 입력 및 발송
-    await page.fill('input[name="client_name"]', 'Test Client');
-    await page.fill('input[name="client_email"]', 'client@test.com');
-    await page.click('button:has-text("발송")');
+    await page.fill('input[name="client_name"]', 'Test Client')
+    await page.fill('input[name="client_email"]', 'client@test.com')
+    await page.click('button:has-text("발송")')
 
     // Step 4: 공유 링크 추출
-    const shareUrl = await page.locator('input[value*="/view/"]').inputValue();
-    await expect(shareUrl).toBeTruthy();
+    const shareUrl = await page.locator('input[value*="/view/"]').inputValue()
+    await expect(shareUrl).toBeTruthy()
 
     // Step 5: 클라이언트 탭에서 공유 링크 접속
-    const clientPage = await page.context().newPage();
-    await clientPage.goto(shareUrl);
+    const clientPage = await page.context().newPage()
+    await clientPage.goto(shareUrl)
 
     // Step 6: 견적서 뷰 및 PDF 다운로드
-    await expect(clientPage.locator('text=Test Client')).toBeVisible();
-    
+    await expect(clientPage.locator('text=Test Client')).toBeVisible()
+
     // PDF 다운로드 (mocked)
-    const downloadPromise = clientPage.waitForEvent('download');
-    await clientPage.click('button:has-text("PDF 다운로드")');
-    const download = await downloadPromise;
-    expect(download.suggestedFilename()).toBeTruthy();
+    const downloadPromise = clientPage.waitForEvent('download')
+    await clientPage.click('button:has-text("PDF 다운로드")')
+    const download = await downloadPromise
+    expect(download.suggestedFilename()).toBeTruthy()
 
     // Step 7: 응답 (승인)
-    await clientPage.click('button:has-text("승인")');
-    await expect(clientPage.locator('text=승인했습니다')).toBeVisible();
+    await clientPage.click('button:has-text("승인")')
+    await expect(clientPage.locator('text=승인했습니다')).toBeVisible()
 
     // Step 8: 프리랜서 대시보드에서 상태 확인
-    await page.bringToFront();
-    await page.reload();
-    await expect(page.locator('text=승인').first()).toBeVisible();
-  });
-});
+    await page.bringToFront()
+    await page.reload()
+    await expect(page.locator('text=승인').first()).toBeVisible()
+  })
+})
 ```
 
 **테스트 픽스처** (로그인 상태 유지):
+
 ```typescript
 // e2e/fixtures.ts
-import { test as base } from '@playwright/test';
+import { test as base } from '@playwright/test'
 
 export const test = base.extend({
   authenticatedPage: async ({ page }, use) => {
     // 1. 회원가입 및 로그인
-    await page.goto('/signup');
-    await page.fill('input[name="email"]', 'test@example.com');
-    await page.fill('input[name="name"]', 'Test User');
-    await page.fill('input[name="password"]', 'password123');
-    await page.click('button:has-text("회원가입")');
+    await page.goto('/signup')
+    await page.fill('input[name="email"]', 'test@example.com')
+    await page.fill('input[name="name"]', 'Test User')
+    await page.fill('input[name="password"]', 'password123')
+    await page.click('button:has-text("회원가입")')
 
     // 2. 로그인
-    await page.goto('/login');
-    await page.fill('input[name="email"]', 'test@example.com');
-    await page.fill('input[name="password"]', 'password123');
-    await page.click('button:has-text("로그인")');
+    await page.goto('/login')
+    await page.fill('input[name="email"]', 'test@example.com')
+    await page.fill('input[name="password"]', 'password123')
+    await page.click('button:has-text("로그인")')
 
     // 3. 대시보드 확인
-    await expect(page).toHaveURL('/dashboard');
+    await expect(page).toHaveURL('/dashboard')
 
-    await use(page);
+    await use(page)
   },
-});
+})
 
-export { expect };
+export { expect }
 ```
 
 **Playwright 설정**:
+
 ```typescript
 // playwright.config.ts
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
   testDir: './e2e',
@@ -1617,10 +1708,11 @@ export default defineConfig({
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
   },
-});
+})
 ```
 
 **테스트 실행**:
+
 ```bash
 npm run test:e2e        # 모든 E2E 테스트 실행
 npm run test:e2e -- auth.spec.ts  # 특정 파일만
@@ -1632,6 +1724,7 @@ npm run test:e2e -- --ui  # UI 모드로 실행
 각 테스트 파일(`e2e/*.spec.ts`)은 다음 Playwright MCP 도구를 활용하여 구현하세요:
 
 ### Happy Path E2E 테스트
+
 - `mcp__playwright__browser_navigate`: 페이지 접속
 - `mcp__playwright__browser_fill_form`: 폼 작성
 - `mcp__playwright__browser_click`: 버튼 클릭
@@ -1639,15 +1732,18 @@ npm run test:e2e -- --ui  # UI 모드로 실행
 - `mcp__playwright__browser_take_screenshot`: 결과 확인 (스크린샷)
 
 ### Error Case E2E 테스트
+
 - `mcp__playwright__browser_press_key`: 잘못된 입력 시뮬레이션
 - `mcp__playwright__browser_console_messages`: 콘솔 에러 확인
 - `mcp__playwright__browser_network_requests`: API 응답 코드 검증 (400, 403, 404 등)
 
 ### 크로스 브라우저/탭 테스트
+
 - `mcp__playwright__browser_tabs`: 다중 탭 관리 (프리랜서 vs 클라이언트)
 - `mcp__playwright__browser_network_requests`: 네트워크 타이밍 검증
 
 **테스트 실행 명령**:
+
 ```bash
 npm run test:e2e                 # 모든 E2E 테스트
 npm run test:e2e -- auth.spec   # 특정 테스트 파일만
@@ -1656,6 +1752,7 @@ npm run test:e2e -- --headed    # 헤드풀 모드 (브라우저 visible)
 ```
 
 **체크리스트**:
+
 - [ ] Playwright 설정 및 설치
 - [ ] 5개 이상의 E2E 테스트 작성 (Happy Path + Error Case)
 - [ ] 인증 기능 E2E 테스트 (회원가입, 로그인, 로그아웃)
@@ -1665,8 +1762,8 @@ npm run test:e2e -- --headed    # 헤드풀 모드 (브라우저 visible)
 - [ ] PDF 다운로드 테스트 (파일 생성 및 다운로드 검증)
 - [ ] 에러 시나리오 테스트 (토큰 만료, 권한 없음, 네트워크 오류)
 - [ ] **모든 E2E 테스트 통과** (`npm run test:e2e`)
-- [ ] 콘솔 에러 없음 (mcp__playwright__browser_console_messages)
-- [ ] 네트워크 요청 정상 (mcp__playwright__browser_network_requests)
+- [ ] 콘솔 에러 없음 (mcp**playwright**browser_console_messages)
+- [ ] 네트워크 요청 정상 (mcp**playwright**browser_network_requests)
 - [ ] `npm run check-all` 통과
 
 ---
@@ -1698,55 +1795,54 @@ npm run test:e2e -- --headed    # 헤드풀 모드 (브라우저 visible)
    - 로딩 상태 표시
 
 **코드 예시**:
+
 ```typescript
 // src/lib/pdf/generate-invoice-pdf.ts
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 
-export async function generateInvoicePdf(
-  elementId: string,
-  filename: string
-) {
-  const element = document.getElementById(elementId);
-  if (!element) throw new Error('Element not found');
+export async function generateInvoicePdf(elementId: string, filename: string) {
+  const element = document.getElementById(elementId)
+  if (!element) throw new Error('Element not found')
 
   // 1. HTML → Canvas
   const canvas = await html2canvas(element, {
     scale: 2,
     useCORS: true,
-  });
+  })
 
   // 2. Canvas → PDF
   const pdf = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',
     format: 'a4',
-  });
+  })
 
-  const imgData = canvas.toDataURL('image/png');
-  const imgWidth = 210; // A4 너비 (mm)
-  const pageHeight = 295; // A4 높이
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  const imgData = canvas.toDataURL('image/png')
+  const imgWidth = 210 // A4 너비 (mm)
+  const pageHeight = 295 // A4 높이
+  const imgHeight = (canvas.height * imgWidth) / canvas.width
 
-  let heightLeft = imgHeight;
-  let position = 0;
+  let heightLeft = imgHeight
+  let position = 0
 
-  pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-  heightLeft -= pageHeight;
+  pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+  heightLeft -= pageHeight
 
   while (heightLeft > 0) {
-    position = heightLeft - imgHeight;
-    pdf.addPage();
-    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
+    position = heightLeft - imgHeight
+    pdf.addPage()
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+    heightLeft -= pageHeight
   }
 
   // 3. 다운로드
-  pdf.save(filename);
+  pdf.save(filename)
 }
 ```
 
 **클라이언트 컴포넌트**:
+
 ```typescript
 // src/components/invoice/InvoicePdfDownload.tsx
 'use client';
@@ -1782,6 +1878,7 @@ export function InvoicePdfDownload({ invoiceId }: { invoiceId: string }) {
 ```
 
 **테스트**:
+
 - [ ] PDF 파일 생성 성공
 - [ ] 파일명 정확함 (invoice-{id}.pdf)
 - [ ] 한글 텍스트 표시 확인
@@ -1790,6 +1887,7 @@ export function InvoicePdfDownload({ invoiceId }: { invoiceId: string }) {
 - [ ] 이미지/아이콘 포함 여부
 
 **체크리스트**:
+
 - [ ] jsPDF + html2canvas 또는 html2pdf 설치
 - [ ] PDF 생성 함수 구현
 - [ ] InvoicePdfDownload 컴포넌트 구현
@@ -1832,6 +1930,7 @@ export function InvoicePdfDownload({ invoiceId }: { invoiceId: string }) {
    - [ ] 모니터링 활성화
 
 **번들 분석 설정**:
+
 ```bash
 npm install --save-dev @next/bundle-analyzer
 ```
@@ -1840,11 +1939,11 @@ npm install --save-dev @next/bundle-analyzer
 // next.config.js
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
-});
+})
 
 module.exports = withBundleAnalyzer({
   // Next.js 설정
-});
+})
 ```
 
 ```bash
@@ -1852,6 +1951,7 @@ ANALYZE=true npm run build
 ```
 
 **Vercel 배포**:
+
 ```bash
 npm i -g vercel
 vercel
@@ -1859,6 +1959,7 @@ vercel
 ```
 
 **체크리스트**:
+
 - [ ] 이미지 최적화 (Next.js Image 컴포넌트 사용)
 - [ ] 번들 크기 분석 및 최적화
 - [ ] Notion API 캐싱 (적절한 TTL 설정)
@@ -1894,6 +1995,7 @@ Task 002: 타입 정의 + Zod 스키마
 ```
 
 **병렬 실행 가능한 작업**:
+
 - Task 004~007 (UI 개발)은 Task 001~003 완료 후 병렬 가능
 - Task 008~012는 순차 진행 필수 (의존성 높음)
 - Task 013 (E2E 테스트)는 Task 008~012 완료 후 병렬 가능
@@ -1903,54 +2005,62 @@ Task 002: 타입 정의 + Zod 스키마
 
 ## 마일스톤 타임라인
 
-| Week | Phase | 마일스톤 | 목표 |
-|------|-------|---------|------|
-| 1-2 | Phase 1 | **애플리케이션 골격 완성** | 라우팅 + 타입 + DB 스키마 |
-| 3-4 | Phase 2 | **UI/UX 완성** | 8개 페이지 UI (더미 데이터) |
-| 5-7 | Phase 3 | **핵심 기능 구현** | Notion API + Auth + CRUD + Email + E2E 테스트 |
-| 8 | Phase 4 | **배포 준비** | PDF + 성능 최적화 + Vercel 배포 |
+| Week | Phase   | 마일스톤                   | 목표                                          |
+| ---- | ------- | -------------------------- | --------------------------------------------- |
+| 1-2  | Phase 1 | **애플리케이션 골격 완성** | 라우팅 + 타입 + DB 스키마                     |
+| 3-4  | Phase 2 | **UI/UX 완성**             | 8개 페이지 UI (더미 데이터)                   |
+| 5-7  | Phase 3 | **핵심 기능 구현**         | Notion API + Auth + CRUD + Email + E2E 테스트 |
+| 8    | Phase 4 | **배포 준비**              | PDF + 성능 최적화 + Vercel 배포               |
 
 **주간 체크포인트**:
 
 **Week 1 (Phase 1 - Day 1~7)**:
+
 - [ ] Task 001: 라우팅 설정 (2일)
 - [ ] Task 002: 타입 정의 (2일)
 - [ ] Task 003: DB 스키마 (2일)
 - **마일스톤**: `npm run check-all` 통과, 타입 에러 없음
 
 **Week 2 (Phase 1 - Day 8~14)**:
+
 - Task 002~003 마무리 (1일)
 - Task 004: 공통 컴포넌트 시작 (3일)
 - **마일스톤**: shadcn/ui 컴포넌트 10개 설치, 기본 헤더/사이드바 완성
 
 **Week 3 (Phase 2 - Day 15~21)**:
+
 - [ ] Task 004: 공통 컴포넌트 완성 (2일)
 - [ ] Task 005: 인증 페이지 UI (2일)
 - [ ] Task 006: 프리랜서 페이지 UI (2일)
 - **마일스톤**: 로그인, 회원가입, 대시보드 UI 완성
 
 **Week 4 (Phase 2 - Day 22~28)**:
+
 - [ ] Task 006: 프리랜서 페이지 UI 완성 (2일)
 - [ ] Task 007: 클라이언트 페이지 UI (3일)
 - **마일스톤**: 8개 페이지 UI 완성, 반응형 테스트 완료
 
 **Week 5 (Phase 3 - Day 29~35)**:
+
 - [ ] Task 008: 인증 구현 (3일)
 - [ ] Task 009: 노션 API 연동 (2일)
 - **마일스톤**: 회원가입/로그인 동작, 노션 데이터 파싱 성공
 
 **Week 6 (Phase 3 - Day 36~42)**:
+
 - [ ] Task 010: CRUD API (2일)
 - [ ] Task 011: 공유 링크 & 상태 관리 (2일)
 - [ ] Task 012: 이메일 발송 (2일)
 - **마일스톤**: 견적서 발송 및 이메일 전송 성공
 
 **Week 7 (Phase 3 - Day 43~49)**:
+
 - [ ] Task 013: E2E 테스트 (3일)
 - [ ] 버그 수정 및 리팩토링 (3일)
 - **마일스톤**: 모든 E2E 테스트 통과, `npm run check-all` 통과
 
 **Week 8 (Phase 4 - Day 50~56)**:
+
 - [ ] Task 014: PDF 다운로드 (2일)
 - [ ] Task 015: 성능 최적화 & 배포 (3일)
 - **마일스톤**: Vercel 배포 성공, Lighthouse 점수 80 이상
@@ -1959,17 +2069,18 @@ Task 002: 타입 정의 + Zod 스키마
 
 ## 위험 요소 및 완화 전략
 
-| 위험 | 영향 | 확률 | 완화 전략 |
-|------|------|------|---------|
-| **Notion API Rate Limit** | 노션 임포트 실패 | 중 | exponential backoff 구현, 캐싱 전략 |
-| **Supabase 데이터 손실** | 서비스 중단 | 낮 | 정기 백업, 트랜잭션 사용 |
-| **인증 보안 취약점** | 계정 탈취 | 낮 | OWASP 가이드 준수, 정기 보안 감시 |
-| **PDF 생성 성능** | 느린 다운로드 (>3초) | 중 | 서버 사이드 렌더링 고려, 캐싱 |
-| **이메일 전달 실패** | 클라이언트가 링크 못 받음 | 낮 | 발송 로그 기록, 재발송 기능 |
-| **UI 반응형 문제** | 모바일 사용성 저하 | 중 | 초기부터 반응형 테스트 포함 |
-| **타입 에러 누적** | 개발 속도 저하 | 낮 | 엄격한 TypeScript 설정, lint 규칙 |
+| 위험                      | 영향                      | 확률 | 완화 전략                           |
+| ------------------------- | ------------------------- | ---- | ----------------------------------- |
+| **Notion API Rate Limit** | 노션 임포트 실패          | 중   | exponential backoff 구현, 캐싱 전략 |
+| **Supabase 데이터 손실**  | 서비스 중단               | 낮   | 정기 백업, 트랜잭션 사용            |
+| **인증 보안 취약점**      | 계정 탈취                 | 낮   | OWASP 가이드 준수, 정기 보안 감시   |
+| **PDF 생성 성능**         | 느린 다운로드 (>3초)      | 중   | 서버 사이드 렌더링 고려, 캐싱       |
+| **이메일 전달 실패**      | 클라이언트가 링크 못 받음 | 낮   | 발송 로그 기록, 재발송 기능         |
+| **UI 반응형 문제**        | 모바일 사용성 저하        | 중   | 초기부터 반응형 테스트 포함         |
+| **타입 에러 누적**        | 개발 속도 저하            | 낮   | 엄격한 TypeScript 설정, lint 규칙   |
 
 **위험 모니터링**:
+
 - 주간 성능 지표 확인 (Lighthouse, 번들 크기)
 - E2E 테스트 통과율 추적
 - 버그 트래킹 (GitHub Issues)
@@ -1980,6 +2091,7 @@ Task 002: 타입 정의 + Zod 스키마
 ## 성공 기준
 
 ### 개발 완료 기준
+
 - [ ] 모든 Task 완료 및 체크리스트 통과
 - [ ] `npm run check-all` 100% 통과
 - [ ] E2E 테스트 100% 통과
@@ -1987,6 +2099,7 @@ Task 002: 타입 정의 + Zod 스키마
 - [ ] 문서화 완료
 
 ### 기능 검증 기준
+
 - [ ] 노션 URL → 공유 링크 생성: **5분 이내**
 - [ ] 웹 뷰 로딩: **2초 이내**
 - [ ] PDF 다운로드: **3초 이내**
@@ -1994,6 +2107,7 @@ Task 002: 타입 정의 + Zod 스키마
 - [ ] 대시보드 상태 추적: **실시간 또는 <1분**
 
 ### 배포 기준
+
 - [ ] Vercel 배포 성공
 - [ ] 프로덕션 환경 E2E 테스트 통과
 - [ ] Lighthouse 점수: 성능 80 이상

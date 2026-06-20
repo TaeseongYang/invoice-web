@@ -75,7 +75,7 @@ export default async function InvoiceDetailPage({
 
         <div className="grid gap-8 lg:grid-cols-3">
           {/* 메인 컨텐츠 (2/3) */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="space-y-6 lg:col-span-2">
             {/* 견적서 헤더 */}
             <div className="flex items-start justify-between">
               <div>
@@ -167,10 +167,7 @@ export default async function InvoiceDetailPage({
             {/* 액션 버튼 */}
             <div className="space-y-3">
               {/* TODO: 발송 Server Action 연결 */}
-              <Button
-                className="w-full"
-                disabled={invoice.status !== 'draft'}
-              >
+              <Button className="w-full" disabled={invoice.status !== 'draft'}>
                 <Send className="mr-2 h-4 w-4" />
                 견적서 발송
               </Button>

@@ -47,24 +47,16 @@ export default function DashboardPage() {
           </div>
           <Link href="/invoices/new">
             <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              새 견적서 작성
+              <Plus className="mr-2 h-4 w-4" />새 견적서 작성
             </Button>
           </Link>
         </div>
 
         {/* 상태별 필터 탭 */}
         {/* TODO: 실제 필터 기능 구현 */}
-        <div className="mb-6 flex gap-2 flex-wrap">
+        <div className="mb-6 flex flex-wrap gap-2">
           {(
-            [
-              '전체',
-              '발송 대기',
-              '발송됨',
-              '승인',
-              '거절',
-              '보류',
-            ] as const
+            ['전체', '발송 대기', '발송됨', '승인', '거절', '보류'] as const
           ).map(tab => (
             <Button key={tab} variant="outline" size="sm">
               {tab}
@@ -78,14 +70,15 @@ export default function DashboardPage() {
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-16">
               <FileText className="text-muted-foreground mb-4 h-12 w-12" />
-              <h3 className="mb-2 text-lg font-semibold">아직 견적서가 없습니다</h3>
+              <h3 className="mb-2 text-lg font-semibold">
+                아직 견적서가 없습니다
+              </h3>
               <p className="text-muted-foreground mb-6 text-center text-sm">
                 첫 번째 견적서를 작성하고 클라이언트에게 공유해보세요.
               </p>
               <Link href="/invoices/new">
                 <Button>
-                  <Plus className="mr-2 h-4 w-4" />
-                  새 견적서 작성
+                  <Plus className="mr-2 h-4 w-4" />새 견적서 작성
                 </Button>
               </Link>
             </CardContent>
@@ -101,9 +94,7 @@ export default function DashboardPage() {
                 총 {mockInvoices.length}개의 견적서
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              {/* TODO: Table 컴포넌트로 구현 */}
-            </CardContent>
+            <CardContent>{/* TODO: Table 컴포넌트로 구현 */}</CardContent>
           </Card>
         )}
       </Container>

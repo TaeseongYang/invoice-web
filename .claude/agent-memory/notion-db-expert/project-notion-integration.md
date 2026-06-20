@@ -27,7 +27,7 @@ metadata:
 
 ## 환경변수
 
-- `NOTION_API_TOKEN`: Integration Secret Token (서버 전용, NEXT_PUBLIC_ 없음)
+- `NOTION_API_TOKEN`: Integration Secret Token (서버 전용, NEXT*PUBLIC* 없음)
 - `NOTION_API_VERSION`: `2022-06-28` (기본값)
 
 [[user-freelancer-saas]]

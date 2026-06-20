@@ -1,15 +1,15 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Download, CheckCircle, XCircle, Clock, AlertTriangle } from 'lucide-react'
+import {
+  Download,
+  CheckCircle,
+  XCircle,
+  Clock,
+  AlertTriangle,
+} from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 
 export const metadata: Metadata = {
@@ -18,7 +18,8 @@ export const metadata: Metadata = {
 }
 
 // TODO: Supabase에서 token으로 견적서 조회 + 만료 검증
-async function getInvoiceByToken(_token: string) {
+async function getInvoiceByToken(token: string) {
+  void token
   // 임시 mock - 실제로는 Supabase 조회
   return {
     isExpired: false,
@@ -36,9 +37,7 @@ async function getInvoiceByToken(_token: string) {
         description?: string
       }>,
       createdAt: new Date().toISOString(),
-      expiresAt: new Date(
-        Date.now() + 30 * 24 * 60 * 60 * 1000
-      ).toISOString(),
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
     },
   }
 }

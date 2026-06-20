@@ -43,7 +43,8 @@ export default async function InvoiceSentPage({
             </div>
             <h1 className="text-3xl font-bold">견적서 발송 완료!</h1>
             <p className="text-muted-foreground mt-2">
-              <strong>{mockClientEmail}</strong>에 견적서 이메일이 발송되었습니다.
+              <strong>{mockClientEmail}</strong>에 견적서 이메일이
+              발송되었습니다.
             </p>
           </div>
 
@@ -69,7 +70,8 @@ export default async function InvoiceSentPage({
 
           {/* 안내 메시지 */}
           <p className="text-muted-foreground mb-8 text-center text-sm">
-            클라이언트가 견적서를 확인하고 승인/거절하면 대시보드에서 알 수 있습니다.
+            클라이언트가 견적서를 확인하고 승인/거절하면 대시보드에서 알 수
+            있습니다.
           </p>
 
           {/* 대시보드 이동 */}

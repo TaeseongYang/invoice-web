@@ -48,14 +48,14 @@ export default function NewInvoicePage() {
             <AlertTitle>노션 Integration 연결이 필요합니다</AlertTitle>
             <AlertDescription className="mt-2 space-y-2">
               <p>
-                임포트하려는 노션 페이지에 InvoiceWeb
-                Integration이 연결되어 있어야 합니다.
+                임포트하려는 노션 페이지에 InvoiceWeb Integration이 연결되어
+                있어야 합니다.
               </p>
               <ol className="ml-4 list-decimal space-y-1 text-sm">
                 <li>노션 페이지 우측 상단의 메뉴 클릭</li>
                 <li>
-                  <strong>연결</strong> 선택 후{' '}
-                  <strong>InvoiceWeb</strong> Integration 추가
+                  <strong>연결</strong> 선택 후 <strong>InvoiceWeb</strong>{' '}
+                  Integration 추가
                 </li>
                 <li>아래에 페이지 URL을 입력하세요</li>
               </ol>

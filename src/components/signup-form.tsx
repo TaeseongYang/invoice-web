@@ -40,9 +40,7 @@ const signupSchema = z
       .min(1, '비밀번호를 입력해주세요.')
       .min(8, '비밀번호는 최소 8자 이상이어야 합니다.'),
     confirmPassword: z.string().min(1, '비밀번호 확인을 입력해주세요.'),
-    terms: z
-      .boolean()
-      .refine(val => val === true, '이용약관에 동의해주세요.'),
+    terms: z.boolean().refine(val => val === true, '이용약관에 동의해주세요.'),
   })
   .refine(data => data.password === data.confirmPassword, {
     message: '비밀번호가 일치하지 않습니다.',
@@ -103,7 +101,11 @@ export function SignupForm() {
                 <FormItem>
                   <FormLabel>이메일</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="email@example.com" {...field} />
+                    <Input
+                      type="email"
+                      placeholder="email@example.com"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -123,10 +125,7 @@ export function SignupForm() {
                     </span>
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="(주)홍길동스튜디오"
-                      {...field}
-                    />
+                    <Input placeholder="(주)홍길동스튜디오" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -176,7 +175,7 @@ export function SignupForm() {
               control={form.control}
               name="terms"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormItem className="flex flex-row items-start space-y-0 space-x-3">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
