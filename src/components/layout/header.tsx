@@ -22,7 +22,7 @@ export function Header() {
           {/* Logo */}
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="text-xl font-bold">NextJS Starter</span>
+              <span className="text-xl font-bold">InvoiceWeb</span>
             </Link>
 
             {/* Desktop Navigation */}
