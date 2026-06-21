@@ -47,13 +47,17 @@ export default async function InvoiceViewPage({
   const invoice = DUMMY_INVOICE
 
   return (
-    <div className="bg-muted/30 min-h-screen py-8">
+    <div className="bg-muted/20 min-h-screen py-10">
       <div className="mx-auto max-w-3xl px-4">
         {/* 견적서 헤더 */}
-        <div className="mb-6 text-center">
-          <p className="text-muted-foreground text-sm">견적서</p>
-          <h1 className="mt-1 text-3xl font-bold">{invoice.title}</h1>
-          <div className="text-muted-foreground mt-2 flex items-center justify-center gap-4 text-sm">
+        <div className="mb-8 text-center">
+          <span className="text-muted-foreground inline-block rounded-full border px-3 py-1 text-xs font-medium">
+            견적서
+          </span>
+          <h1 className="mt-3 text-3xl font-extrabold tracking-tight">
+            {invoice.title}
+          </h1>
+          <div className="text-muted-foreground mt-3 flex items-center justify-center gap-4 text-sm">
             {invoice.issuedAt && (
               <span>
                 발행일: {new Date(invoice.issuedAt).toLocaleDateString('ko-KR')}
@@ -69,21 +73,23 @@ export default async function InvoiceViewPage({
         </div>
 
         {/* 프리랜서 정보 카드 */}
-        <Card className="mb-4">
+        <Card className="mb-4 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-base">발행자 정보</CardTitle>
+            <CardTitle className="text-muted-foreground text-sm font-semibold tracking-wide uppercase">
+              발행자 정보
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-1 text-sm">
-              <div className="flex justify-between">
+            <div className="divide-y text-sm">
+              <div className="flex justify-between py-2.5">
                 <span className="text-muted-foreground">이름</span>
                 <span className="font-medium">김프리</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between py-2.5">
                 <span className="text-muted-foreground">소속</span>
                 <span className="font-medium">ABC 에이전시</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between py-2.5">
                 <span className="text-muted-foreground">연락처</span>
                 <span className="font-medium">freelancer@example.com</span>
               </div>
@@ -92,11 +98,11 @@ export default async function InvoiceViewPage({
         </Card>
 
         {/* 견적서 항목 */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle>견적 내용</CardTitle>
+        <Card className="mb-6 shadow-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-base font-semibold">견적 내용</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-0">
             <InvoiceItemsTable
               items={invoice.items}
               totalAmount={invoice.totalAmount}
@@ -105,19 +111,27 @@ export default async function InvoiceViewPage({
         </Card>
 
         {/* 액션 버튼 영역 */}
-        <div className="space-y-4">
-          {/* PDF 다운로드 버튼 (UI만) */}
-          <Button variant="outline" className="w-full" onClick={() => {}}>
-            <Download className="mr-2 h-4 w-4" />
-            PDF 다운로드
-            {/* TODO: PDF 다운로드 기능 구현 필요 */}
-          </Button>
+        <Card className="shadow-sm">
+          <CardContent className="space-y-4 p-5">
+            <Button
+              variant="outline"
+              className="w-full gap-2"
+              onClick={() => {}}
+            >
+              <Download className="h-4 w-4" />
+              PDF 다운로드
+            </Button>
 
-          <Separator />
+            <Separator />
 
-          {/* 승인/보류/거절 버튼 */}
-          <InvoiceViewActions />
-        </div>
+            <div>
+              <p className="text-muted-foreground mb-3 text-center text-sm font-medium">
+                이 견적서에 대한 의사를 알려주세요
+              </p>
+              <InvoiceViewActions />
+            </div>
+          </CardContent>
+        </Card>
 
         {/* 푸터 */}
         <p className="text-muted-foreground mt-8 text-center text-xs">

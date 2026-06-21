@@ -53,13 +53,12 @@ export default function NewInvoicePage() {
   }
 
   return (
-    <div className="min-h-screen">
-      {/* TODO: 인증된 사용자 전용 헤더 */}
-      <Container className="py-8">
+    <div className="bg-muted/10 min-h-screen">
+      <Container className="py-10">
         {/* 뒤로가기 */}
         <Link
           href="/dashboard"
-          className="text-muted-foreground hover:text-foreground mb-6 flex items-center gap-2 text-sm transition-colors"
+          className="text-muted-foreground hover:text-foreground mb-8 inline-flex items-center gap-2 text-sm transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           대시보드로 돌아가기
@@ -67,18 +66,22 @@ export default function NewInvoicePage() {
 
         <div className="mx-auto max-w-2xl">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold">새 견적서 작성</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="text-3xl font-extrabold tracking-tight">
+              새 견적서 작성
+            </h1>
+            <p className="text-muted-foreground mt-2">
               노션 견적서 페이지의 공개 URL을 입력하세요
             </p>
           </div>
 
           {/* Integration 연결 가이드 Alert */}
-          <Alert className="mb-6">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>노션 Integration 연결이 필요합니다</AlertTitle>
-            <AlertDescription className="mt-2 space-y-2">
-              <p>
+          <Alert className="mb-6 border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-100">
+            <AlertCircle className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <AlertTitle className="font-semibold">
+              노션 Integration 연결이 필요합니다
+            </AlertTitle>
+            <AlertDescription className="mt-2 space-y-2 text-blue-800 dark:text-blue-200">
+              <p className="text-sm">
                 임포트하려는 노션 페이지에 InvoiceWeb Integration이 연결되어
                 있어야 합니다.
               </p>
@@ -94,7 +97,7 @@ export default function NewInvoicePage() {
                 href="https://notion.so"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary inline-flex items-center gap-1 text-sm hover:underline"
+                className="inline-flex items-center gap-1 text-sm font-medium text-blue-700 hover:underline dark:text-blue-300"
               >
                 노션 열기
                 <ExternalLink className="h-3 w-3" />
@@ -104,9 +107,11 @@ export default function NewInvoicePage() {
 
           {/* 로딩 중 스켈레톤 표시 */}
           {isLoading ? (
-            <Card>
+            <Card className="shadow-sm">
               <CardHeader>
-                <CardTitle>노션에서 데이터를 가져오는 중...</CardTitle>
+                <CardTitle className="text-base">
+                  노션에서 데이터를 가져오는 중...
+                </CardTitle>
                 <CardDescription>잠시만 기다려주세요</CardDescription>
               </CardHeader>
               <CardContent>
@@ -114,22 +119,25 @@ export default function NewInvoicePage() {
               </CardContent>
             </Card>
           ) : (
-            /* URL 입력 폼 */
-            <Card>
-              <CardHeader>
-                <CardTitle>노션 URL 입력</CardTitle>
+            <Card className="shadow-sm">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-base font-semibold">
+                  노션 URL 입력
+                </CardTitle>
                 <CardDescription>
                   공개 설정된 노션 견적서 페이지의 URL을 붙여넣으세요
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="notionUrl">노션 페이지 URL</Label>
+                  <Label htmlFor="notionUrl" className="text-sm font-medium">
+                    노션 페이지 URL
+                  </Label>
                   <Input
                     id="notionUrl"
                     type="url"
                     placeholder="https://www.notion.so/your-page-id"
-                    className="font-mono text-sm"
+                    className="h-10 font-mono text-sm"
                     value={url}
                     onChange={e => setUrl(e.target.value)}
                   />
@@ -138,9 +146,8 @@ export default function NewInvoicePage() {
                   </p>
                 </div>
 
-                {/* 임포트 버튼 */}
                 <Button
-                  className="w-full"
+                  className="w-full gap-2 shadow-sm"
                   onClick={handleImport}
                   disabled={!url.trim()}
                 >

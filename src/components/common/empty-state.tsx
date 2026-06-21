@@ -1,6 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
 
-// 빈 상태 표시 컴포넌트
 interface EmptyStateProps {
   icon?: LucideIcon
   title: string
@@ -15,26 +14,21 @@ export function EmptyState({
   action,
 }: EmptyStateProps) {
   return (
-    // 중앙 정렬 레이아웃
-    <div className="flex flex-col items-center justify-center py-16 text-center">
-      {/* 아이콘 영역 */}
+    <div className="flex flex-col items-center justify-center py-20 text-center">
       {Icon && (
-        <div className="bg-muted mb-4 flex h-14 w-14 items-center justify-center rounded-full">
-          <Icon className="text-muted-foreground h-7 w-7" />
+        <div className="bg-primary/8 mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border">
+          <Icon className="text-primary h-7 w-7" />
         </div>
       )}
 
-      {/* 제목 */}
       <h3 className="mb-2 text-lg font-semibold">{title}</h3>
 
-      {/* 설명 (선택적) */}
       {description && (
-        <p className="text-muted-foreground mb-6 max-w-sm text-sm">
+        <p className="text-muted-foreground mb-6 max-w-sm text-sm leading-relaxed">
           {description}
         </p>
       )}
 
-      {/* 액션 영역 (선택적) */}
       {action && <div>{action}</div>}
     </div>
   )

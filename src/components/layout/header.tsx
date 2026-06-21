@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
-import { Menu } from 'lucide-react'
+import { Menu, FileText } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
@@ -21,8 +21,13 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-6">
-            <Link href="/" className="flex items-center space-x-2">
-              <span className="text-xl font-bold">InvoiceWeb</span>
+            <Link href="/" className="flex items-center gap-2">
+              <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
+                <FileText className="text-primary-foreground h-4 w-4" />
+              </div>
+              <span className="text-xl font-bold tracking-tight">
+                InvoiceWeb
+              </span>
             </Link>
 
             {/* Desktop Navigation */}
