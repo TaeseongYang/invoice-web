@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Send, Pencil, Check, X } from 'lucide-react'
+import { Send, Pencil, Check, X, Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -15,6 +16,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CopyButton } from '@/components/invoice/copy-button'
+import { sendInvoiceEmailAction } from '@/app/actions/email'
 import type { InvoiceWithItems } from '@/lib/types/invoice'
 
 interface InvoiceDetailClientProps {
@@ -24,9 +26,47 @@ interface InvoiceDetailClientProps {
 export function InvoiceDetailClient({ invoice }: InvoiceDetailClientProps) {
   const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
+  const [isSending, setIsSending] = useState(false)
+  const [clientEmail, setClientEmail] = useState('')
+  const [editEmail, setEditEmail] = useState('')
+  const [editName, setEditName] = useState(invoice.clientName)
 
-  const handleSend = () => {
-    router.push(`/invoices/${invoice.notionPageId}/sent`)
+  const handleSend = async () => {
+    if (!clientEmail) {
+      toast.error('클라이언트 이메일을 먼저 입력해주세요.')
+      setIsEditing(true)
+      return
+    }
+
+    setIsSending(true)
+    try {
+      const shareUrl =
+        typeof window !== 'undefined'
+          ? `${window.location.origin}/view/${invoice.notionPageId}`
+          : `/view/${invoice.notionPageId}`
+
+      const result = await sendInvoiceEmailAction({
+        to: clientEmail,
+        clientName: editName || invoice.clientName,
+        invoiceTitle: invoice.title,
+        shareUrl,
+        expiresAt: invoice.expiresAt,
+      })
+
+      if (!result.success) {
+        toast.error('이메일 발송에 실패했습니다.', {
+          description: result.error,
+        })
+        return
+      }
+
+      toast.success('견적서가 발송되었습니다.')
+      router.push(
+        `/invoices/${invoice.notionPageId}/sent?email=${encodeURIComponent(clientEmail)}`
+      )
+    } finally {
+      setIsSending(false)
+    }
   }
 
   const shareUrl =
@@ -52,7 +92,13 @@ export function InvoiceDetailClient({ invoice }: InvoiceDetailClientProps) {
               variant="ghost"
               size="sm"
               className="h-8 w-8 p-0"
-              onClick={() => setIsEditing(!isEditing)}
+              onClick={() => {
+                if (!isEditing) {
+                  setEditName(invoice.clientName)
+                  setEditEmail(clientEmail)
+                }
+                setIsEditing(!isEditing)
+              }}
             >
               {isEditing ? (
                 <X className="h-4 w-4" />
@@ -72,7 +118,8 @@ export function InvoiceDetailClient({ invoice }: InvoiceDetailClientProps) {
                 <Input
                   id="clientName"
                   placeholder="김철수"
-                  defaultValue={invoice.clientName}
+                  value={editName}
+                  onChange={e => setEditName(e.target.value)}
                   className="h-9"
                 />
               </div>
@@ -84,6 +131,8 @@ export function InvoiceDetailClient({ invoice }: InvoiceDetailClientProps) {
                   id="clientEmail"
                   type="email"
                   placeholder="client@company.com"
+                  value={editEmail}
+                  onChange={e => setEditEmail(e.target.value)}
                   className="h-9"
                 />
               </div>
@@ -103,7 +152,10 @@ export function InvoiceDetailClient({ invoice }: InvoiceDetailClientProps) {
               <Button
                 className="w-full"
                 size="sm"
-                onClick={() => setIsEditing(false)}
+                onClick={() => {
+                  setClientEmail(editEmail)
+                  setIsEditing(false)
+                }}
               >
                 <Check className="mr-2 h-3.5 w-3.5" />
                 저장
@@ -113,11 +165,11 @@ export function InvoiceDetailClient({ invoice }: InvoiceDetailClientProps) {
             <div className="divide-y text-sm">
               <div className="flex justify-between py-2.5">
                 <span className="text-muted-foreground">이름</span>
-                <span className="font-medium">{invoice.clientName || '-'}</span>
+                <span className="font-medium">{editName || '-'}</span>
               </div>
               <div className="flex justify-between py-2.5">
                 <span className="text-muted-foreground">이메일</span>
-                <span className="font-medium">-</span>
+                <span className="font-medium">{clientEmail || '-'}</span>
               </div>
               <div className="flex justify-between py-2.5">
                 <span className="text-muted-foreground">회사명</span>
@@ -132,9 +184,17 @@ export function InvoiceDetailClient({ invoice }: InvoiceDetailClientProps) {
       <Card className="border-dashed shadow-none">
         <CardContent className="p-4">
           {invoice.status === '대기' ? (
-            <Button className="w-full gap-2 shadow-sm" onClick={handleSend}>
-              <Send className="h-4 w-4" />
-              발송하기
+            <Button
+              className="w-full gap-2 shadow-sm"
+              onClick={handleSend}
+              disabled={isSending}
+            >
+              {isSending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
+              {isSending ? '발송 중...' : '발송하기'}
             </Button>
           ) : (
             <CopyButton text={shareUrl} label="공유 링크 복사" />

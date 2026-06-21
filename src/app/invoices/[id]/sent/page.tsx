@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { CheckCircle, ArrowLeft } from 'lucide-react'
+import { CheckCircle, ArrowLeft, Mail } from 'lucide-react'
 
 import {
   Card,
@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/layout/container'
 import { CopyButton } from '@/components/invoice/copy-button'
+import { env } from '@/lib/env'
 
 export const metadata: Metadata = {
   title: '견적서 발송 완료',
@@ -20,15 +21,19 @@ export const metadata: Metadata = {
 
 export default async function InvoiceSentPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ email?: string }>
 }) {
   const { id } = await params
-  // TODO: 실제 데이터베이스에서 id 기반 공유 토큰 조회 로직 연결
-  void id
+  const { email } = await searchParams
 
-  // 공유 링크 (더미 토큰 사용)
-  const shareUrl = 'https://localhost:3000/view/dummy-token'
+  // notionPageId를 공유 토큰으로 직접 사용 (Task 011 결정사항)
+  const appUrl = env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+  const shareUrl = `${appUrl}/view/${id}`
+
+  const sentToEmail = email ? decodeURIComponent(email) : null
 
   return (
     <div className="min-h-screen">
@@ -43,6 +48,12 @@ export default async function InvoiceSentPage({
             <p className="text-muted-foreground mt-2">
               견적서가 성공적으로 발송되었습니다.
             </p>
+            {sentToEmail && (
+              <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1 text-sm text-green-700 dark:bg-green-950/20 dark:text-green-400">
+                <Mail className="h-3.5 w-3.5" />
+                <span>{sentToEmail}</span>
+              </div>
+            )}
           </div>
 
           {/* 공유 링크 카드 */}

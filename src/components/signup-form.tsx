@@ -1,7 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -50,6 +52,7 @@ const signupSchema = z
 type SignupFormValues = z.infer<typeof signupSchema>
 
 export function SignupForm() {
+  const router = useRouter()
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -62,9 +65,15 @@ export function SignupForm() {
     },
   })
 
-  function onSubmit(values: SignupFormValues) {
-    // TODO: Supabase Auth 연동
-    console.log('회원가입 데이터:', values)
+  function onSubmit(_values: SignupFormValues) {
+    // 인증 시스템 MVP 범위 외 제외 (Task 008 ⛔)
+    toast.info('현재 회원가입 기능 준비 중입니다.', {
+      description: '지금은 대시보드를 직접 이용해주세요.',
+      action: {
+        label: '대시보드로 이동',
+        onClick: () => router.push('/dashboard'),
+      },
+    })
   }
 
   return (

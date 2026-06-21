@@ -2,8 +2,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -39,6 +41,7 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>
 
 export function LoginForm() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
 
   const form = useForm<LoginFormValues>({
@@ -46,9 +49,15 @@ export function LoginForm() {
     defaultValues: { email: '', password: '' },
   })
 
-  function onSubmit(values: LoginFormValues) {
-    // TODO: Supabase Auth 연동
-    console.log('로그인 데이터:', values)
+  function onSubmit(_values: LoginFormValues) {
+    // 인증 시스템 MVP 범위 외 제외 (Task 008 ⛔)
+    toast.info('현재 인증 기능 준비 중입니다.', {
+      description: '지금은 대시보드를 직접 이용해주세요.',
+      action: {
+        label: '대시보드로 이동',
+        onClick: () => router.push('/dashboard'),
+      },
+    })
   }
 
   return (

@@ -1,13 +1,28 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
+import { unstable_cache } from 'next/cache'
 
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/layout/container'
 import { InvoiceDashboardClient } from '@/components/invoice/invoice-dashboard-client'
-import { listInvoices } from '@/lib/notion'
-import { getInvoiceItems } from '@/lib/notion'
+import { listInvoices, getInvoiceItems } from '@/lib/notion'
 import type { InvoiceWithItems } from '@/lib/types/invoice'
+
+// 대시보드 견적서 목록 캐싱 — 30초 TTL, tags: ['invoices']로 상태 변경 시 무효화
+const getCachedInvoicesWithItems = unstable_cache(
+  async (): Promise<InvoiceWithItems[]> => {
+    const invoices = await listInvoices()
+    return Promise.all(
+      invoices.map(async invoice => {
+        const items = await getInvoiceItems(invoice.itemIds)
+        return { ...invoice, items }
+      })
+    )
+  },
+  ['dashboard-invoices'],
+  { revalidate: 30, tags: ['invoices'] }
+)
 
 export const metadata: Metadata = {
   title: '대시보드',
@@ -15,14 +30,7 @@ export const metadata: Metadata = {
 }
 
 export default async function DashboardPage() {
-  const invoices = await listInvoices()
-
-  const invoicesWithItems: InvoiceWithItems[] = await Promise.all(
-    invoices.map(async invoice => {
-      const items = await getInvoiceItems(invoice.itemIds)
-      return { ...invoice, items }
-    })
-  )
+  const invoicesWithItems = await getCachedInvoicesWithItems()
 
   return (
     <div className="min-h-screen">
