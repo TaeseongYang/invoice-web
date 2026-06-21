@@ -1,6 +1,9 @@
-import type { Metadata } from 'next'
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Send, Copy } from 'lucide-react'
+import { useParams, useRouter } from 'next/navigation'
+import { ArrowLeft, Send, Pencil, Check, X } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -10,59 +13,34 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
 import { Container } from '@/components/layout/container'
+import { InvoiceItemsTable } from '@/components/invoice/invoice-items-table'
+import { StatusBadge } from '@/components/invoice/status-badge'
+import { CopyButton } from '@/components/invoice/copy-button'
+import { DUMMY_INVOICE } from '@/lib/data/dummy-invoices'
 
-export const metadata: Metadata = {
-  title: '견적서 상세',
-  description: '견적서 내용을 확인하고 클라이언트에게 발송하세요',
-}
-
-// TODO: Supabase에서 실제 데이터 조회로 교체
-const mockInvoice = {
-  id: 'mock-id',
-  title: '[견적서 제목 - 노션에서 임포트됨]',
-  status: 'draft' as const,
-  totalAmount: 0,
-  notionUrl: '',
-  clientName: '',
-  clientEmail: '',
-  clientCompany: '',
-  items: [] as Array<{
-    title: string
-    quantity: number
-    unitPrice: number
-    amount: number
-    description?: string
-  }>,
-  createdAt: new Date().toISOString(),
-}
-
-const statusConfig = {
-  draft: { label: '초안', variant: 'secondary' as const },
-  sent: { label: '발송됨', variant: 'default' as const },
-  approved: { label: '승인됨', variant: 'default' as const },
-  rejected: { label: '거절됨', variant: 'destructive' as const },
-}
-
-export default async function InvoiceDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
-  const { id } = await params
-  // TODO: Supabase에서 invoice 조회 (id 사용)
+export default function InvoiceDetailPage() {
+  const params = useParams()
+  const router = useRouter()
+  // URL params에서 id 추출
+  const id = params.id as string
   void id
 
-  const invoice = mockInvoice
-  const status = statusConfig[invoice.status]
+  // TODO: 실제 데이터베이스에서 id 기반 견적서 조회 로직 연결
+  const invoice = DUMMY_INVOICE
+
+  // 클라이언트 정보 편집 토글 상태 관리
+  const [isEditing, setIsEditing] = useState(false)
+
+  const handleSend = () => {
+    // TODO: 발송 Server Action 연결
+    router.push(`/invoices/dummy-001/sent`)
+  }
 
   return (
     <div className="min-h-screen">
-      {/* TODO: 인증된 사용자 전용 헤더 */}
       <Container className="py-8">
         {/* 뒤로가기 */}
         <Link
@@ -74,18 +52,20 @@ export default async function InvoiceDetailPage({
         </Link>
 
         <div className="grid gap-8 lg:grid-cols-3">
-          {/* 메인 컨텐츠 (2/3) */}
+          {/* 메인 콘텐츠 (2/3) */}
           <div className="space-y-6 lg:col-span-2">
             {/* 견적서 헤더 */}
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between gap-4">
               <div>
                 <h1 className="text-3xl font-bold">{invoice.title}</h1>
                 <p className="text-muted-foreground mt-1 text-sm">
-                  생성일:{' '}
-                  {new Date(invoice.createdAt).toLocaleDateString('ko-KR')}
+                  발행일:{' '}
+                  {invoice.issuedAt
+                    ? new Date(invoice.issuedAt).toLocaleDateString('ko-KR')
+                    : '-'}
                 </p>
               </div>
-              <Badge variant={status.variant}>{status.label}</Badge>
+              <StatusBadge status={invoice.status} />
             </div>
 
             {/* 견적서 항목 테이블 */}
@@ -95,93 +75,120 @@ export default async function InvoiceDetailPage({
                 <CardDescription>노션에서 임포트된 견적 내용</CardDescription>
               </CardHeader>
               <CardContent>
-                {invoice.items.length === 0 ? (
-                  <p className="text-muted-foreground py-8 text-center text-sm">
-                    {/* TODO: 실제 데이터 표시 */}
-                    임포트된 견적 항목이 여기에 표시됩니다.
-                  </p>
-                ) : (
-                  <div className="space-y-2">
-                    {/* TODO: 항목 목록 렌더링 */}
-                    {/* 컬럼: 항목명, 설명, 수량, 단가, 금액 */}
-                  </div>
-                )}
-                <Separator className="my-4" />
-                <div className="flex justify-end">
-                  <div className="text-right">
-                    <p className="text-muted-foreground text-sm">합계</p>
-                    <p className="text-2xl font-bold">
-                      {invoice.totalAmount.toLocaleString('ko-KR')}원
-                    </p>
-                  </div>
-                </div>
+                <InvoiceItemsTable
+                  items={invoice.items}
+                  totalAmount={invoice.totalAmount}
+                />
               </CardContent>
             </Card>
           </div>
 
           {/* 사이드바 (1/3) */}
           <div className="space-y-6">
-            {/* 클라이언트 정보 입력 */}
-            {/* TODO: React Hook Form으로 교체 + 편집/저장 토글 */}
+            {/* 클라이언트 정보 섹션 */}
             <Card>
               <CardHeader>
-                <CardTitle>클라이언트 정보</CardTitle>
-                <CardDescription>
-                  견적서를 받을 클라이언트 정보를 입력하세요
-                </CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>클라이언트 정보</CardTitle>
+                    <CardDescription>
+                      견적서를 받을 클라이언트 정보
+                    </CardDescription>
+                  </div>
+                  {/* 편집 토글 버튼 */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsEditing(!isEditing)}
+                  >
+                    {isEditing ? (
+                      <X className="h-4 w-4" />
+                    ) : (
+                      <Pencil className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="clientName">클라이언트 이름</Label>
-                  <Input
-                    id="clientName"
-                    placeholder="김철수"
-                    defaultValue={invoice.clientName}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="clientEmail">이메일</Label>
-                  <Input
-                    id="clientEmail"
-                    type="email"
-                    placeholder="client@company.com"
-                    defaultValue={invoice.clientEmail}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="clientCompany">
-                    회사명{' '}
-                    <span className="text-muted-foreground font-normal">
-                      (선택)
-                    </span>
-                  </Label>
-                  <Input
-                    id="clientCompany"
-                    placeholder="(주)클라이언트"
-                    defaultValue={invoice.clientCompany}
-                  />
-                </div>
+                {isEditing ? (
+                  /* 편집 모드 */
+                  <>
+                    <div className="space-y-2">
+                      <Label htmlFor="clientName">클라이언트 이름</Label>
+                      <Input
+                        id="clientName"
+                        placeholder="김철수"
+                        defaultValue={invoice.clientName}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="clientEmail">이메일</Label>
+                      <Input
+                        id="clientEmail"
+                        type="email"
+                        placeholder="client@company.com"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="clientCompany">
+                        회사명{' '}
+                        <span className="text-muted-foreground font-normal">
+                          (선택)
+                        </span>
+                      </Label>
+                      <Input id="clientCompany" placeholder="(주)클라이언트" />
+                    </div>
+                    {/* 저장 버튼 */}
+                    <Button
+                      className="w-full"
+                      size="sm"
+                      onClick={() => {
+                        /* TODO: 클라이언트 정보 저장 Server Action 연결 */
+                        setIsEditing(false)
+                      }}
+                    >
+                      <Check className="mr-2 h-4 w-4" />
+                      저장
+                    </Button>
+                  </>
+                ) : (
+                  /* 보기 모드 */
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">이름</span>
+                      <span className="font-medium">
+                        {invoice.clientName || '-'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">이메일</span>
+                      <span className="font-medium">-</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">회사명</span>
+                      <span className="font-medium">-</span>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
-            {/* 액션 버튼 */}
+            {/* 상태별 액션 버튼 */}
             <div className="space-y-3">
-              {/* TODO: 발송 Server Action 연결 */}
-              <Button className="w-full" disabled={invoice.status !== 'draft'}>
-                <Send className="mr-2 h-4 w-4" />
-                견적서 발송
-              </Button>
-
-              {invoice.status !== 'draft' && (
-                <Button variant="outline" className="w-full">
-                  <Copy className="mr-2 h-4 w-4" />
-                  공개 링크 복사
+              {invoice.status === '대기' ? (
+                /* 대기 상태: 발송하기 버튼 */
+                <Button className="w-full" onClick={handleSend}>
+                  <Send className="mr-2 h-4 w-4" />
+                  발송하기
                 </Button>
+              ) : (
+                /* 승인/거절 상태: 공유 링크 복사 버튼 */
+                <CopyButton
+                  text={`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'}/view/dummy-token`}
+                  label="공유 링크 복사"
+                />
               )}
             </div>
-
-            {/* 클라이언트 응답 상태 (발송 후) */}
-            {/* TODO: 실제 응답 데이터 연동 */}
           </div>
         </div>
       </Container>

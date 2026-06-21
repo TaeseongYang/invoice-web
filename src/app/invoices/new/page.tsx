@@ -1,5 +1,8 @@
-import type { Metadata } from 'next'
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { ArrowLeft, ExternalLink, AlertCircle } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -14,13 +17,41 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Container } from '@/components/layout/container'
-
-export const metadata: Metadata = {
-  title: '새 견적서 작성',
-  description: '노션 URL을 입력하여 견적서를 임포트하세요',
-}
+import { LoadingSkeleton } from '@/components/common/loading-skeleton'
+import { ErrorCard } from '@/components/common/error-card'
 
 export default function NewInvoicePage() {
+  const router = useRouter()
+  // URL 입력값 상태 관리
+  const [url, setUrl] = useState('')
+  // 로딩 상태 관리
+  const [isLoading, setIsLoading] = useState(false)
+  // 에러 상태 관리
+  const [error, setError] = useState(false)
+
+  const handleImport = () => {
+    // TODO: 실제 노션 URL 파싱 및 API 호출 로직 연결
+    setError(false)
+    setIsLoading(true)
+
+    // 로딩 시뮬레이션 (2초 후 이동)
+    setTimeout(() => {
+      setIsLoading(false)
+      router.push('/invoices/dummy-001')
+    }, 2000)
+  }
+
+  // 에러 상태 표시
+  if (error) {
+    return (
+      <ErrorCard
+        variant="error"
+        title="임포트에 실패했습니다"
+        description="노션 URL을 확인하고 다시 시도해주세요. Integration이 올바르게 연결되어 있는지 확인하세요."
+      />
+    )
+  }
+
   return (
     <div className="min-h-screen">
       {/* TODO: 인증된 사용자 전용 헤더 */}
@@ -42,7 +73,7 @@ export default function NewInvoicePage() {
             </p>
           </div>
 
-          {/* Integration 연결 가이드 */}
+          {/* Integration 연결 가이드 Alert */}
           <Alert className="mb-6">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>노션 Integration 연결이 필요합니다</AlertTitle>
@@ -71,37 +102,53 @@ export default function NewInvoicePage() {
             </AlertDescription>
           </Alert>
 
-          {/* URL 입력 폼 */}
-          {/* TODO: React Hook Form + Server Action으로 교체 */}
-          <Card>
-            <CardHeader>
-              <CardTitle>노션 URL 입력</CardTitle>
-              <CardDescription>
-                공개 설정된 노션 견적서 페이지의 URL을 붙여넣으세요
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="notionUrl">노션 페이지 URL</Label>
-                <Input
-                  id="notionUrl"
-                  type="url"
-                  placeholder="https://www.notion.so/your-page-id"
-                  className="font-mono text-sm"
-                />
-                <p className="text-muted-foreground text-xs">
-                  예시: https://www.notion.so/Invoice-abc123def456...
-                </p>
-              </div>
+          {/* 로딩 중 스켈레톤 표시 */}
+          {isLoading ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>노션에서 데이터를 가져오는 중...</CardTitle>
+                <CardDescription>잠시만 기다려주세요</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <LoadingSkeleton rows={4} />
+              </CardContent>
+            </Card>
+          ) : (
+            /* URL 입력 폼 */
+            <Card>
+              <CardHeader>
+                <CardTitle>노션 URL 입력</CardTitle>
+                <CardDescription>
+                  공개 설정된 노션 견적서 페이지의 URL을 붙여넣으세요
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="notionUrl">노션 페이지 URL</Label>
+                  <Input
+                    id="notionUrl"
+                    type="url"
+                    placeholder="https://www.notion.so/your-page-id"
+                    className="font-mono text-sm"
+                    value={url}
+                    onChange={e => setUrl(e.target.value)}
+                  />
+                  <p className="text-muted-foreground text-xs">
+                    예시: https://www.notion.so/Invoice-abc123def456...
+                  </p>
+                </div>
 
-              {/* TODO: 임포트 중 로딩 상태 및 에러 메시지 표시 */}
-
-              <Button className="w-full" disabled>
-                {/* TODO: 임포트 Server Action 연결 */}
-                견적서 임포트하기
-              </Button>
-            </CardContent>
-          </Card>
+                {/* 임포트 버튼 */}
+                <Button
+                  className="w-full"
+                  onClick={handleImport}
+                  disabled={!url.trim()}
+                >
+                  견적서 임포트하기
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </Container>
     </div>
