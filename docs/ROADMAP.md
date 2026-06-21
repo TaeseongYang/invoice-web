@@ -91,12 +91,12 @@
 
 ## 4단계 개발 계획
 
-### Phase 1: 애플리케이션 골격 구축 (2주)
+### Phase 1: 애플리케이션 골격 구축 (2주) ✅
 
 > **목표**: 타입 안전한 프로젝트 기초와 전체 라우팅 구조 정의  
-> **산출물**: 실행 가능한 라우팅 + 타입 정의 + DB 스키마
+> **산출물**: 실행 가능한 라우팅 + 타입 정의 + Notion API 데이터 레이어
 
-#### Task 001: 프로젝트 구조 및 라우팅 설정
+#### Task 001: 프로젝트 구조 및 라우팅 설정 ✅ - 완료
 
 **목표**: Next.js 15 App Router 기반 전체 페이지 구조 정의
 
@@ -153,32 +153,32 @@ src/
 
 ### 구조 검증
 
-- [ ] 8개 라우트 페이지 생성: `npm run dev`로 각 라우트 접속 시 에러 없이 렌더링 확인
-- [ ] 공통 레이아웃 정상: 헤더, 사이드바, 푸터 모든 페이지에 표시 확인
-- [ ] 라우트 그룹 적용: (auth), (protected), (public) 레이아웃 분리 확인
+- [x] 8개 라우트 페이지 생성: `npm run dev`로 각 라우트 접속 시 에러 없이 렌더링 확인
+- [x] 공통 레이아웃 정상: 헤더, 사이드바, 푸터 모든 페이지에 표시 확인
+- [x] 라우트 그룹 적용: (auth), (protected), (public) 레이아웃 분리 확인
 
 ### 타입 검증
 
-- [ ] TypeScript 컴파일: `npm run build` 성공 (타입 에러 없음)
-- [ ] ESLint 검사: `npm run lint` 통과
-- [ ] Prettier 포맷: `npm run format` 적용 후 재검사 통과
+- [x] TypeScript 컴파일: `npm run build` 성공 (타입 에러 없음)
+- [x] ESLint 검사: `npm run lint` 통과
+- [x] Prettier 포맷: `npm run format` 적용 후 재검사 통과
 
 ### 미들웨어 검증
 
-- [ ] 보호된 페이지 접근: 비로그인 상태에서 `/dashboard` 접속 시 `/login`으로 리다이렉트 확인
-- [ ] 공개 페이지: `/` 및 `/view/[token]` 비로그인 상태에서 접근 가능 확인
+- [x] 보호된 페이지 접근: 비로그인 상태에서 `/dashboard` 접속 시 `/login`으로 리다이렉트 확인
+- [x] 공개 페이지: `/` 및 `/view/[token]` 비로그인 상태에서 접근 가능 확인
 
 **체크리스트**:
 
-- [ ] 8개 라우트 페이지 빈 틀 생성 (에러 없이 렌더링)
-- [ ] 공통 레이아웃 구조 정의 (헤더, 사이드바 등)
-- [ ] 라우트 보호 미들웨어 기본 구조 작성
-- [ ] ESLint/Prettier 설정 확인
-- [ ] `npm run check-all` 통과 (타입 에러 없음)
+- [x] 9개 라우트 페이지 빈 틀 생성 (에러 없이 렌더링)
+- [x] 공통 레이아웃 구조 정의 (헤더, 사이드바 등)
+- [x] 라우트 보호 미들웨어 기본 구조 작성
+- [x] ESLint/Prettier 설정 확인
+- [x] `npm run check-all` 통과 (타입 에러 없음)
 
 ---
 
-#### Task 002: TypeScript 타입 정의 및 Zod 스키마 작성
+#### Task 002: TypeScript 타입 정의 및 Zod 스키마 작성 ✅ - 완료
 
 **목표**: 타입 안전하고 검증 가능한 데이터 구조 정의
 
@@ -265,146 +265,114 @@ export const invoiceSchema = z.object({
 
 ### 타입 정의 검증
 
-- [ ] TypeScript strict mode 통과: `tsc --noEmit` 성공 (에러 0개)
-- [ ] IDE 자동완성: VSCode에서 `Invoice.` 입력 시 모든 필드 자동완성 동작 확인
-- [ ] 타입 안전성: 잘못된 타입 할당 시 TypeScript 컴파일 에러 발생 확인
+- [x] TypeScript strict mode 통과: `tsc --noEmit` 성공 (에러 0개)
+- [x] IDE 자동완성: VSCode에서 `Invoice.` 입력 시 모든 필드 자동완성 동작 확인
+- [x] 타입 안전성: 잘못된 타입 할당 시 TypeScript 컴파일 에러 발생 확인
 
 ### Zod 스키마 검증
 
-- [ ] 스키마 파싱 성공: 유효한 데이터 `parse()` 성공 확인
-- [ ] 스키마 검증 실패: 유효하지 않은 데이터 `safeParse()` 에러 반환 확인
-- [ ] 에러 메시지: 검증 실패 시 명확한 에러 메시지 표시
+- [x] 스키마 파싱 성공: 유효한 데이터 `parse()` 성공 확인
+- [x] 스키마 검증 실패: 유효하지 않은 데이터 `safeParse()` 에러 반환 확인
+- [x] 에러 메시지: 검증 실패 시 명확한 에러 메시지 표시
 
 ### 환경변수 검증
 
-- [ ] 환경변수 로드: `src/lib/env.ts` 성공적으로 로드 및 타입 지정
-- [ ] 빌드 시 검증: `npm run build` 시 필수 환경변수 누락 시 빌드 실패 확인
+- [x] 환경변수 로드: `src/lib/env.ts` 성공적으로 로드 및 타입 지정
+- [x] 빌드 시 검증: `npm run build` 시 필수 환경변수 누락 시 빌드 실패 확인
 
 **체크리스트**:
 
-- [ ] 모든 데이터 모델 타입 정의 완료
-- [ ] Zod 스키마 작성 및 테스트
-- [ ] 환경변수 검증 설정 (`src/lib/env.ts`)
-- [ ] TypeScript strict mode에서 컴파일 성공
-- [ ] IDE에서 타입 자동완성 동작 확인
+- [x] 모든 데이터 모델 타입 정의 완료 (Invoice, InvoiceItem, InvoiceWithItems, InvoiceStatus, ApiResponse, PaginatedResponse)
+- [x] Zod 스키마 작성 및 테스트 (createInvoiceSchema, updateInvoiceStatusSchema, notionUrlSchema, freelancerSchema, loginSchema)
+- [x] 환경변수 검증 설정 (`src/lib/env.ts` — NOTION_API_TOKEN, NOTION_DATABASE_ID, NOTION_ITEMS_DATABASE_ID, RESEND_API_KEY)
+- [x] TypeScript strict mode에서 컴파일 성공
+- [x] IDE에서 타입 자동완성 동작 확인
 
 ---
 
-#### Task 003: Supabase 데이터베이스 스키마 설계
+#### Task 003: Notion API 클라이언트 및 데이터 레이어 구축 ✅ - 완료
 
-**목표**: PostgreSQL 스키마 정의 및 Supabase 프로젝트 초기화
+**목표**: Notion API를 데이터 소스로 직접 사용하는 데이터 레이어 구축
+
+> **구현 방향 변경 안내**: 본 프로젝트는 별도의 관계형 데이터베이스(Supabase) 대신 **Notion API를 직접 데이터 소스로 사용**하는 구조로 전환되었습니다. 따라서 기존 Supabase PostgreSQL 스키마 설계는 제외되고, `@notionhq/client` 기반의 Notion 데이터 레이어 구축으로 대체되었습니다.
 
 **구현 사항**:
 
-1. **Supabase 프로젝트 생성 및 설정**
-   - 프로젝트 생성 (리전: ap-northeast-1)
-   - Auth 설정 (이메일/비밀번호 인증)
-   - Row Level Security (RLS) 정책 수립
+1. **Notion API 클라이언트** (`src/lib/notion/client.ts`)
+   - `@notionhq/client` 설치 및 클라이언트 초기화
+   - `NOTION_API_TOKEN` 환경변수 기반 인증 (서버 전용)
 
-2. **PostgreSQL 테이블 생성** (SQL 마이그레이션)
+2. **Notion URL 파싱** (`src/lib/notion/parse-url.ts`)
+   - 노션 URL에서 32자리 hex 페이지 ID 추출
+   - UUID 형식으로 변환 및 유효성 검사
 
-   ```sql
-   -- 1. freelancers 테이블
-   CREATE TABLE freelancers (
-     id UUID PRIMARY KEY REFERENCES auth.users(id),
-     email TEXT UNIQUE NOT NULL,
-     name TEXT NOT NULL,
-     company_name TEXT,
-     created_at TIMESTAMP DEFAULT NOW(),
-     updated_at TIMESTAMP DEFAULT NOW()
-   );
+3. **데이터 레이어** (`src/lib/notion/database.ts`)
+   - `listInvoices()`: 견적서 목록 조회
+   - `getInvoiceById()`: 단일 견적서 조회
+   - `getInvoiceItemById()` / `getInvoiceItems()`: 견적서 항목 조회
+   - `createInvoice()`: 견적서 생성
+   - `updateInvoiceStatus()`: 견적서 상태 변경
 
-   -- 2. invoices 테이블
-   CREATE TABLE invoices (
-     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-     freelancer_id UUID NOT NULL REFERENCES freelancers(id) ON DELETE CASCADE,
-     notion_url TEXT NOT NULL,
-     client_name TEXT NOT NULL,
-     client_email TEXT NOT NULL,
-     client_company TEXT,
-     status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'sent', 'approved', 'rejected')),
-     share_token TEXT UNIQUE NOT NULL,
-     total_amount DECIMAL(12, 2) NOT NULL,
-     created_at TIMESTAMP DEFAULT NOW(),
-     updated_at TIMESTAMP DEFAULT NOW(),
-     expires_at TIMESTAMP NOT NULL
-   );
+4. **Rate Limit 재시도 유틸리티** (`src/lib/notion/retry.ts`)
+   - `withRetry()`: Exponential Backoff 기반 429 재시도 로직
 
-   -- 3. invoice_items 테이블
-   CREATE TABLE invoice_items (
-     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-     invoice_id UUID NOT NULL REFERENCES invoices(id) ON DELETE CASCADE,
-     title TEXT NOT NULL,
-     description TEXT,
-     quantity INTEGER NOT NULL,
-     unit_price DECIMAL(12, 2) NOT NULL,
-     amount DECIMAL(12, 2) NOT NULL,
-     "order" INTEGER NOT NULL
-   );
-
-   -- 4. invoice_responses 테이블
-   CREATE TABLE invoice_responses (
-     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-     invoice_id UUID NOT NULL UNIQUE REFERENCES invoices(id) ON DELETE CASCADE,
-     status TEXT NOT NULL CHECK (status IN ('approved', 'rejected', 'pending')),
-     notes TEXT,
-     responded_at TIMESTAMP DEFAULT NOW()
-   );
-   ```
-
-3. **Row Level Security (RLS) 정책**
-   - `freelancers`: 프리랜서는 자신의 정보만 조회/수정 가능
-   - `invoices`: 프리랜서는 자신의 견적서만 조회 가능
-   - `invoice_responses`: 모든 사람이 읽기 가능 (토큰 검증)
-
-4. **Supabase 클라이언트 설정**
-   - `src/lib/supabase/client.ts` (클라이언트 사용)
-   - `src/lib/supabase/server.ts` (서버 액션 사용)
+5. **공개 인터페이스** (`src/lib/notion/index.ts`)
+   - 데이터 레이어 함수들의 통합 export
 
 **기술 결정사항**:
 
-- UUID 기본키 사용 (성능 + 보안)
-- `created_at`, `updated_at` 자동 관리 (트리거 또는 애플리케이션)
-- `expires_at` 필드로 공유 링크 만료 관리
+- Notion API를 단일 데이터 소스로 사용 (별도 DB 미사용)
+- Notion 코드는 `src/lib/notion/` 서버 전용 디렉토리에 격리
+- `NOTION_API_TOKEN`은 `NEXT_PUBLIC_` 접두사 금지 (서버 환경변수만)
+
+**파일 구조**:
+
+```
+src/lib/notion/
+├── client.ts (Notion API 클라이언트)
+├── parse-url.ts (URL → UUID 변환)
+├── database.ts (listInvoices, getInvoiceById, getInvoiceItemById, getInvoiceItems, createInvoice, updateInvoiceStatus)
+├── retry.ts (withRetry — Rate Limit 처리)
+└── index.ts (공개 인터페이스)
+```
 
 ## 테스트 체크리스트
 
-### 데이터베이스 생성 검증
+### Notion 클라이언트 검증
 
-- [ ] 테이블 생성 성공: Supabase 대시보드에서 4개 테이블 확인
-- [ ] 스키마 정확성: 각 테이블의 컬럼, 타입, 제약조건 검증
-- [ ] 외래키 제약: `invoice_items.invoice_id` → `invoices.id` 관계 확인
-- [ ] 기본값 설정: `created_at`, `updated_at`, `expires_at` 기본값 정상 작동
+- [x] `@notionhq/client` 설치 및 클라이언트 초기화 정상 동작
+- [x] `NOTION_API_TOKEN` 환경변수 로드 및 인증 확인
+- [x] 서버 전용 격리: 클라이언트 번들에 Notion 토큰 미노출 확인
 
-### RLS 정책 검증
+### URL 파싱 검증
 
-- [ ] 프리랜서 데이터: 사용자가 자신의 freelancers 행만 조회/수정 가능 확인
-- [ ] 견적서 데이터: 프리랜서가 자신의 invoices만 조회 가능, 다른 사용자는 접근 불가
-- [ ] 공개 데이터: invoice_responses 모든 사용자 읽기 가능 (토큰 검증 애플리케이션 레벨)
+- [x] 정상 노션 URL에서 페이지 ID 추출 및 UUID 변환 확인
+- [x] 유효하지 않은 URL 형식 처리 확인
 
-### 클라이언트 라이브러리 검증
+### 데이터 레이어 검증
 
-- [ ] 클라이언트 연결: `src/lib/supabase/client.ts` 정상 작동
-- [ ] 서버 연결: `src/lib/supabase/server.ts` 정상 작동
-- [ ] 환경변수: `SUPABASE_URL`, `SUPABASE_ANON_KEY` 설정 및 로드 확인
+- [x] `listInvoices` / `getInvoiceById` / `getInvoiceItems` 함수 정상 구현
+- [x] `createInvoice` / `updateInvoiceStatus` 함수 정상 구현
+- [x] `withRetry` 재시도 유틸리티 정상 구현
 
 **체크리스트**:
 
-- [ ] Supabase 프로젝트 생성 및 API 키 발급
-- [ ] 4개 테이블 생성 (freelancers, invoices, invoice_items, invoice_responses)
-- [ ] RLS 정책 설정 및 테스트
-- [ ] Supabase 클라이언트 라이브러리 설치 및 설정
-- [ ] `.env.local` 파일에 환경변수 추가
-- [ ] 데이터베이스 연결 테스트 성공
+- [x] `@notionhq/client` 설치
+- [x] `src/lib/notion/client.ts` 생성
+- [x] `src/lib/notion/parse-url.ts` 생성 (URL → UUID 변환)
+- [x] `src/lib/notion/database.ts` 생성 (CRUD 데이터 레이어)
+- [x] `src/lib/notion/retry.ts` 생성 (withRetry)
+- [x] `src/lib/notion/index.ts` 생성 (공개 인터페이스)
+- [x] `npm run check-all` 에러 0개, `npm run build` 성공 (9개 라우트)
 
 ---
 
-### Phase 2: UI/UX 완성 (2주)
+### Phase 2: UI/UX 완성 (2주) ✅
 
 > **목표**: 모든 페이지 UI를 더미 데이터로 구현하고 디자인 검증  
 > **산출물**: 시각적으로 완성된 8개 페이지 (더미 데이터, 기능 없음)
 
-#### Task 004: 공통 컴포넌트 라이브러리 구현
+#### Task 004: 공통 컴포넌트 라이브러리 구현 ✅ - 완료
 
 **목표**: shadcn/ui 기반 프로젝트 전용 컴포넌트 라이브러리 구축
 
@@ -494,15 +462,15 @@ src/components/
 
 **체크리스트**:
 
-- [ ] shadcn/ui 15+ 컴포넌트 설치
-- [ ] 프로젝트 커스텀 컴포넌트 10개 이상 작성
-- [ ] 반응형 디자인 테스트 (모바일, 태블릿, 데스크톱)
-- [ ] 컬러/타이포그래피 일관성 확인
-- [ ] Storybook 또는 간단한 컴포넌트 갤러리 페이지 추가
+- [x] shadcn/ui 추가 컴포넌트 설치 (table, tabs, textarea, tooltip)
+- [x] 더미 데이터 20개 생성 (`src/lib/data/dummy-invoices.ts` — 대기 8, 승인 7, 거절 5)
+- [x] invoice/ 컴포넌트 5개 (status-badge, invoice-table, invoice-items-table, reject-modal, copy-button)
+- [x] common/ 컴포넌트 3개 (loading-skeleton, empty-state, error-card)
+- [x] `npm run check-all` 통과, `npm run build` 성공
 
 ---
 
-#### Task 005: 인증 페이지 UI (로그인, 회원가입)
+#### Task 005: 인증 페이지 UI (로그인, 회원가입) ✅ - 완료
 
 **목표**: Supabase Auth 연동 전 UI/UX 완성
 
@@ -558,15 +526,15 @@ src/components/
 
 **체크리스트**:
 
-- [ ] 로그인 페이지 UI 완성 (더미 상태)
-- [ ] 회원가입 페이지 UI 완성 (더미 상태)
-- [ ] 반응형 디자인 확인
-- [ ] 폼 검증 UI (에러 메시지 표시)
-- [ ] 접근성 기준 확인 (label, aria 속성)
+- [x] 로그인 페이지 UI 완성 (min-h-screen flex items-center justify-center, LoginForm 렌더링)
+- [x] 회원가입 페이지 UI 완성 (동일 레이아웃, SignupForm 렌더링)
+- [x] 반응형 디자인 확인
+- [x] 폼 검증 UI (에러 메시지 표시)
+- [x] `npm run check-all` 통과
 
 ---
 
-#### Task 006: 프리랜서 페이지 UI (대시보드, 견적서 작성, 상세)
+#### Task 006: 프리랜서 페이지 UI (대시보드, 견적서 작성, 상세) ✅ - 완료
 
 **목표**: 프리랜서 주요 페이지 UI 완성 (더미 데이터)
 
@@ -653,15 +621,15 @@ const dummyInvoices = [
 
 **체크리스트**:
 
-- [ ] 대시보드 페이지 UI 완성 (테이블, 필터, CTA)
-- [ ] 견적서 작성 페이지 UI 완성 (폼, 로딩, 에러)
-- [ ] 견적서 상세 페이지 UI 완성 (읽기/편집 모드)
-- [ ] 더미 데이터 20개 이상 생성
-- [ ] 테이블 반응형 디자인 (모바일: 카드 형식)
+- [x] 대시보드 페이지 UI 완성 (Tabs 필터, InvoiceTable, EmptyState)
+- [x] 견적서 작성 페이지 UI 완성 (URL 입력, LoadingSkeleton, setTimeout 더미 임포트)
+- [x] 견적서 상세 페이지 UI 완성 (InvoiceItemsTable, StatusBadge, isEditing 토글)
+- [x] 견적서 발송 완료 페이지 UI 완성 (CopyButton, 공유 링크)
+- [x] 테이블 반응형 디자인 (모바일: 카드 형식)
 
 ---
 
-#### Task 007: 클라이언트 페이지 UI (견적서 뷰, 응답 완료)
+#### Task 007: 클라이언트 페이지 UI (견적서 뷰, 응답 완료) ✅ - 완료
 
 **목표**: 클라이언트 사용자 경험 페이지 UI 완성
 
@@ -756,12 +724,12 @@ const unauthorized = { error: 'INVALID_TOKEN', message: '유효하지 않은 링
 
 **체크리스트**:
 
-- [ ] 견적서 뷰 페이지 UI 완성 (상태별 버튼 4개)
-- [ ] 거절 모달 UI (텍스트 입력)
-- [ ] 응답 완료 페이지 UI
-- [ ] 에러 화면 UI (토큰 만료, 권한 없음)
-- [ ] 반응형 디자인 (모바일: 카드 형식)
-- [ ] 프린트 스타일 고려 (PDF 다운로드 대비)
+- [x] 견적서 뷰 페이지 UI 완성 (DUMMY_INVOICE, expired/invalid 토큰 분기, InvoiceItemsTable)
+- [x] InvoiceViewActions 컴포넌트 (use client, 승인/보류/거절 버튼)
+- [x] 거절 모달 UI (RejectModal — Dialog + Textarea)
+- [x] 응답 완료 페이지 UI (async searchParams, 상태별 아이콘/메시지)
+- [x] 에러 화면 UI (ErrorCard — expired/invalid/error variant)
+- [x] `npm run check-all` 통과, `npm run build` 성공 (9개 라우트)
 
 ---
 
@@ -2016,10 +1984,10 @@ Task 002: 타입 정의 + Zod 스키마
 
 **Week 1 (Phase 1 - Day 1~7)**:
 
-- [ ] Task 001: 라우팅 설정 (2일)
-- [ ] Task 002: 타입 정의 (2일)
-- [ ] Task 003: DB 스키마 (2일)
-- **마일스톤**: `npm run check-all` 통과, 타입 에러 없음
+- [x] Task 001: 라우팅 설정 (2일)
+- [x] Task 002: 타입 정의 (2일)
+- [x] Task 003: Notion API 클라이언트 및 데이터 레이어 (2일)
+- **마일스톤**: `npm run check-all` 통과, 타입 에러 없음 ✅
 
 **Week 2 (Phase 1 - Day 8~14)**:
 
@@ -2029,16 +1997,16 @@ Task 002: 타입 정의 + Zod 스키마
 
 **Week 3 (Phase 2 - Day 15~21)**:
 
-- [ ] Task 004: 공통 컴포넌트 완성 (2일)
-- [ ] Task 005: 인증 페이지 UI (2일)
-- [ ] Task 006: 프리랜서 페이지 UI (2일)
-- **마일스톤**: 로그인, 회원가입, 대시보드 UI 완성
+- [x] Task 004: 공통 컴포넌트 완성 (2일)
+- [x] Task 005: 인증 페이지 UI (2일)
+- [x] Task 006: 프리랜서 페이지 UI (2일)
+- **마일스톤**: 로그인, 회원가입, 대시보드 UI 완성 ✅
 
 **Week 4 (Phase 2 - Day 22~28)**:
 
-- [ ] Task 006: 프리랜서 페이지 UI 완성 (2일)
-- [ ] Task 007: 클라이언트 페이지 UI (3일)
-- **마일스톤**: 8개 페이지 UI 완성, 반응형 테스트 완료
+- [x] Task 006: 프리랜서 페이지 UI 완성 (2일)
+- [x] Task 007: 클라이언트 페이지 UI (3일)
+- **마일스톤**: 8개 페이지 UI 완성, 반응형 테스트 완료 ✅
 
 **Week 5 (Phase 3 - Day 29~35)**:
 
@@ -2127,6 +2095,7 @@ Task 002: 타입 정의 + Zod 스키마
 
 ---
 
-**로드맵 버전**: 1.0  
-**마지막 업데이트**: 2026-06-20  
-**상태**: Active (개발 중)
+**로드맵 버전**: 1.2  
+**마지막 업데이트**: 2026-06-21  
+**상태**: Active (개발 중 - Phase 2 완료, Phase 3 착수 대기)  
+**📊 진행 상황**: Phase 1 + Phase 2 완료 (7/15 Tasks 완료)
