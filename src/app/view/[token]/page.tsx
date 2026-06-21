@@ -1,13 +1,11 @@
 import type { Metadata } from 'next'
-import { Download } from 'lucide-react'
-
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { ErrorCard } from '@/components/common/error-card'
 import { InvoiceItemsTable } from '@/components/invoice/invoice-items-table'
 import { InvoiceViewActions } from '@/components/invoice/invoice-view-actions'
-import { DUMMY_INVOICE } from '@/lib/data/dummy-invoices'
+import { PdfDownloadButton } from '@/components/invoice/pdf-download-button'
+import { getInvoiceWithItemsAction } from '@/app/actions/invoices'
 
 export const metadata: Metadata = {
   title: '견적서 확인',
@@ -21,19 +19,9 @@ export default async function InvoiceViewPage({
 }) {
   const { token } = await params
 
-  // 만료된 링크 처리
-  if (token === 'expired') {
-    return (
-      <ErrorCard
-        variant="expired"
-        title="링크가 만료되었습니다"
-        description="이 견적서 링크는 유효 기간이 지났습니다. 새로운 링크를 요청하려면 담당자에게 문의하세요."
-      />
-    )
-  }
+  const invoice = await getInvoiceWithItemsAction(token)
 
-  // 유효하지 않은 링크 처리
-  if (token === 'invalid') {
+  if (!invoice) {
     return (
       <ErrorCard
         variant="invalid"
@@ -43,8 +31,18 @@ export default async function InvoiceViewPage({
     )
   }
 
-  // TODO: 실제 token으로 데이터베이스에서 견적서 조회
-  const invoice = DUMMY_INVOICE
+  const isExpired =
+    invoice.expiresAt !== null && new Date(invoice.expiresAt) < new Date()
+
+  if (isExpired) {
+    return (
+      <ErrorCard
+        variant="expired"
+        title="링크가 만료되었습니다"
+        description="이 견적서 링크는 유효 기간이 지났습니다. 새로운 링크를 요청하려면 담당자에게 문의하세요."
+      />
+    )
+  }
 
   return (
     <div className="bg-muted/20 min-h-screen py-10">
@@ -72,26 +70,18 @@ export default async function InvoiceViewPage({
           </div>
         </div>
 
-        {/* 프리랜서 정보 카드 */}
+        {/* 클라이언트 정보 카드 */}
         <Card className="mb-4 shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-muted-foreground text-sm font-semibold tracking-wide uppercase">
-              발행자 정보
+              수신인
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="divide-y text-sm">
               <div className="flex justify-between py-2.5">
                 <span className="text-muted-foreground">이름</span>
-                <span className="font-medium">김프리</span>
-              </div>
-              <div className="flex justify-between py-2.5">
-                <span className="text-muted-foreground">소속</span>
-                <span className="font-medium">ABC 에이전시</span>
-              </div>
-              <div className="flex justify-between py-2.5">
-                <span className="text-muted-foreground">연락처</span>
-                <span className="font-medium">freelancer@example.com</span>
+                <span className="font-medium">{invoice.clientName || '-'}</span>
               </div>
             </div>
           </CardContent>
@@ -113,14 +103,7 @@ export default async function InvoiceViewPage({
         {/* 액션 버튼 영역 */}
         <Card className="shadow-sm">
           <CardContent className="space-y-4 p-5">
-            <Button
-              variant="outline"
-              className="w-full gap-2"
-              onClick={() => {}}
-            >
-              <Download className="h-4 w-4" />
-              PDF 다운로드
-            </Button>
+            <PdfDownloadButton invoiceId={token} />
 
             <Separator />
 
@@ -128,7 +111,7 @@ export default async function InvoiceViewPage({
               <p className="text-muted-foreground mb-3 text-center text-sm font-medium">
                 이 견적서에 대한 의사를 알려주세요
               </p>
-              <InvoiceViewActions />
+              <InvoiceViewActions invoicePageId={token} />
             </div>
           </CardContent>
         </Card>

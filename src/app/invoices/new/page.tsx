@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { ArrowLeft, ExternalLink, AlertCircle } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -18,38 +17,27 @@ import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Container } from '@/components/layout/container'
 import { LoadingSkeleton } from '@/components/common/loading-skeleton'
-import { ErrorCard } from '@/components/common/error-card'
+import { importInvoiceAction } from '@/app/actions/notion'
 
 export default function NewInvoicePage() {
-  const router = useRouter()
-  // URL 입력값 상태 관리
   const [url, setUrl] = useState('')
-  // 로딩 상태 관리
   const [isLoading, setIsLoading] = useState(false)
-  // 에러 상태 관리
-  const [error, setError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  const handleImport = () => {
-    // TODO: 실제 노션 URL 파싱 및 API 호출 로직 연결
-    setError(false)
+  const handleImport = async () => {
+    setErrorMessage(null)
     setIsLoading(true)
-
-    // 로딩 시뮬레이션 (2초 후 이동)
-    setTimeout(() => {
+    try {
+      const result = await importInvoiceAction(url)
+      if (!result.success) {
+        setErrorMessage(result.error ?? '알 수 없는 오류가 발생했습니다.')
+      }
+      // 성공 시 Server Action 내부에서 redirect() 처리
+    } catch {
+      setErrorMessage('요청 처리 중 오류가 발생했습니다. 다시 시도해주세요.')
+    } finally {
       setIsLoading(false)
-      router.push('/invoices/dummy-001')
-    }, 2000)
-  }
-
-  // 에러 상태 표시
-  if (error) {
-    return (
-      <ErrorCard
-        variant="error"
-        title="임포트에 실패했습니다"
-        description="노션 URL을 확인하고 다시 시도해주세요. Integration이 올바르게 연결되어 있는지 확인하세요."
-      />
-    )
+    }
   }
 
   return (
@@ -105,6 +93,17 @@ export default function NewInvoicePage() {
             </AlertDescription>
           </Alert>
 
+          {/* 에러 메시지 */}
+          {errorMessage && (
+            <Alert className="mb-4 border-red-200 bg-red-50 text-red-900 dark:border-red-800 dark:bg-red-950/40 dark:text-red-100">
+              <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
+              <AlertTitle className="font-semibold">임포트 실패</AlertTitle>
+              <AlertDescription className="text-red-800 dark:text-red-200">
+                {errorMessage}
+              </AlertDescription>
+            </Alert>
+          )}
+
           {/* 로딩 중 스켈레톤 표시 */}
           {isLoading ? (
             <Card className="shadow-sm">
@@ -140,6 +139,9 @@ export default function NewInvoicePage() {
                     className="h-10 font-mono text-sm"
                     value={url}
                     onChange={e => setUrl(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && url.trim()) handleImport()
+                    }}
                   />
                   <p className="text-muted-foreground text-xs">
                     예시: https://www.notion.so/Invoice-abc123def456...
