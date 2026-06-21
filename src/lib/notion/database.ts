@@ -59,27 +59,26 @@ function parseInvoicePage(page: PageObjectResponse): Invoice {
 function parseItemPage(page: PageObjectResponse): InvoiceItem {
   const props = page.properties
 
-  const titleProp = props['항목명']
-  const title =
-    titleProp.type === 'title' ? (titleProp.title[0]?.plain_text ?? '') : ''
+  const nameProp = props['항목명']
+  const name =
+    nameProp.type === 'title' ? (nameProp.title[0]?.plain_text ?? '') : ''
 
   const quantityProp = props['수량']
-  const quantity =
-    quantityProp.type === 'number' ? (quantityProp.number ?? 0) : 0
+  const quantity = quantityProp.type === 'number' ? quantityProp.number : null
 
   const unitPriceProp = props['단가']
   const unitPrice =
-    unitPriceProp.type === 'number' ? (unitPriceProp.number ?? 0) : 0
+    unitPriceProp.type === 'number' ? unitPriceProp.number : null
 
   const amountProp = props['금액']
   const amount =
     amountProp.type === 'formula' && amountProp.formula.type === 'number'
-      ? (amountProp.formula.number ?? 0)
-      : 0
+      ? amountProp.formula.number
+      : null
 
   return {
     notionPageId: page.id,
-    title,
+    name,
     quantity,
     unitPrice,
     amount,

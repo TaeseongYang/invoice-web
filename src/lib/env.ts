@@ -9,6 +9,7 @@ const envSchema = z.object({
   // Notion API (서버 전용 — 절대 NEXT_PUBLIC_ 접두사 금지)
   NOTION_API_TOKEN: z.string().optional(),
   NOTION_DATABASE_ID: z.string().optional(),
+  NOTION_ITEMS_DATABASE_ID: z.string().optional(),
 
   // Email (서버 전용)
   RESEND_API_KEY: z.string().optional(),
@@ -19,6 +20,7 @@ export const env = envSchema.parse({
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   NOTION_API_TOKEN: process.env.NOTION_API_TOKEN,
   NOTION_DATABASE_ID: process.env.NOTION_DATABASE_ID,
+  NOTION_ITEMS_DATABASE_ID: process.env.NOTION_ITEMS_DATABASE_ID,
   RESEND_API_KEY: process.env.RESEND_API_KEY,
 })
 

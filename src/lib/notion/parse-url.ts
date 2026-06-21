@@ -10,7 +10,10 @@ export function extractPageId(url: string): string {
 export function isValidNotionUrl(url: string): boolean {
   try {
     const parsed = new URL(url)
-    return parsed.hostname.includes('notion.so') && PAGE_ID_REGEX.test(url)
+    const isNotionDomain =
+      parsed.hostname.includes('notion.so') ||
+      parsed.hostname.includes('notion.com')
+    return isNotionDomain && PAGE_ID_REGEX.test(url)
   } catch {
     return false
   }

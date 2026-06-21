@@ -16,10 +16,10 @@ export type Invoice = {
 // Items DB 페이지 (row = 견적서 항목 1개)
 export type InvoiceItem = {
   notionPageId: string // Items DB 페이지 ID
-  title: string // 항목명
-  quantity: number // 수량
-  unitPrice: number // 단가
-  amount: number // 금액 (formula: 수량 × 단가)
+  name: string // 항목명
+  quantity: number | null // 수량
+  unitPrice: number | null // 단가
+  amount: number | null // 금액 (formula: 수량 × 단가)
 }
 
 // 견적서 + 항목 통합 타입 (상세/뷰 페이지에서 사용)
