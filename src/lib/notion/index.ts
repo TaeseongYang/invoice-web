@@ -7,5 +7,6 @@ export {
   getInvoiceItems,
   createInvoice,
   updateInvoiceStatus,
+  incrementViewCount,
 } from './database'
 export { withRetry } from './retry'

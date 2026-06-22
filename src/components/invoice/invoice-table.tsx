@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/table'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, Eye } from 'lucide-react'
 import type { InvoiceWithItems } from '@/lib/types/invoice'
 import { StatusBadge } from '@/components/invoice/status-badge'
 import { CopyButton } from '@/components/invoice/copy-button'
@@ -49,6 +49,9 @@ export function InvoiceTable({ invoices, onRowClick }: InvoiceTableProps) {
               <TableHead className="px-5 py-4 text-sm font-semibold">
                 발행일
               </TableHead>
+              <TableHead className="px-5 py-4 text-center text-sm font-semibold">
+                조회수
+              </TableHead>
               <TableHead className="px-5 py-4 text-right text-sm font-semibold">
                 공유 링크
               </TableHead>
@@ -79,6 +82,12 @@ export function InvoiceTable({ invoices, onRowClick }: InvoiceTableProps) {
                   {invoice.issuedAt
                     ? new Date(invoice.issuedAt).toLocaleDateString('ko-KR')
                     : '-'}
+                </TableCell>
+                <TableCell className="px-5 py-4 text-center">
+                  <span className="text-muted-foreground inline-flex items-center gap-1 text-sm">
+                    <Eye className="h-3.5 w-3.5" />
+                    {invoice.viewCount}
+                  </span>
                 </TableCell>
                 <TableCell
                   className="px-5 py-4 text-right"
@@ -130,6 +139,10 @@ export function InvoiceTable({ invoices, onRowClick }: InvoiceTableProps) {
                   className="flex items-center gap-2"
                   onClick={e => e.stopPropagation()}
                 >
+                  <span className="text-muted-foreground inline-flex items-center gap-1 text-xs">
+                    <Eye className="h-3 w-3" />
+                    {invoice.viewCount}
+                  </span>
                   <CopyButton
                     text={getShareUrl(invoice.notionPageId)}
                     label="링크 복사"

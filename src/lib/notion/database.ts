@@ -43,6 +43,10 @@ function parseInvoicePage(page: PageObjectResponse): Invoice {
   const itemIds =
     itemsProp.type === 'relation' ? itemsProp.relation.map(r => r.id) : []
 
+  const viewCountProp = props['조회수']
+  const viewCount =
+    viewCountProp?.type === 'number' ? (viewCountProp.number ?? 0) : 0
+
   return {
     notionPageId: page.id,
     title,
@@ -52,6 +56,7 @@ function parseInvoicePage(page: PageObjectResponse): Invoice {
     expiresAt,
     totalAmount,
     itemIds,
+    viewCount,
   }
 }
 
@@ -172,6 +177,34 @@ export async function createInvoice(data: {
   )
   if (!isFullPage(page)) throw new Error('견적서 생성 실패')
   return parseInvoicePage(page)
+}
+
+// 견적서 조회수 1 증가 — Notion DB에 "조회수" 숫자 속성이 없으면 graceful 무시
+export async function incrementViewCount(notionPageId: string): Promise<void> {
+  const notion = createNotionClient()
+  try {
+    const page = await withRetry(() =>
+      notion.pages.retrieve({ page_id: notionPageId })
+    )
+    if (!isFullPage(page)) return
+
+    const viewCountProp = page.properties['조회수']
+    const current =
+      viewCountProp?.type === 'number' ? (viewCountProp.number ?? 0) : null
+
+    if (current === null) return
+
+    await withRetry(() =>
+      notion.pages.update({
+        page_id: notionPageId,
+        properties: {
+          조회수: { number: current + 1 },
+        },
+      })
+    )
+  } catch {
+    // 조회수 업데이트 실패는 사용자 경험에 영향 없음
+  }
 }
 
 // 견적서 상태 업데이트 (대기/승인/거절)

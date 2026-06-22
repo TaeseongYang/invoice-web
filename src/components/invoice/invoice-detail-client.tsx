@@ -17,6 +17,16 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CopyButton } from '@/components/invoice/copy-button'
 import { PdfDownloadButton } from '@/components/invoice/pdf-download-button'
+import dynamic from 'next/dynamic'
+
+const QrCodeCard = dynamic(
+  () => import('@/components/invoice/qr-code-card').then(m => m.QrCodeCard),
+  { ssr: false }
+)
+const ShareButtons = dynamic(
+  () => import('@/components/invoice/share-buttons').then(m => m.ShareButtons),
+  { ssr: false }
+)
 import { sendInvoiceEmailAction } from '@/app/actions/email'
 import type { InvoiceWithItems } from '@/lib/types/invoice'
 
@@ -203,6 +213,12 @@ export function InvoiceDetailClient({ invoice }: InvoiceDetailClientProps) {
           <PdfDownloadButton invoiceId={invoice.notionPageId} />
         </CardContent>
       </Card>
+
+      {/* QR 코드 */}
+      <QrCodeCard url={shareUrl} title={invoice.title} />
+
+      {/* 메신저 공유 */}
+      <ShareButtons url={shareUrl} title={invoice.title} />
     </div>
   )
 }

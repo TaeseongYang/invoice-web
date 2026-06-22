@@ -12,6 +12,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-07-01T09:00:00.000Z',
     totalAmount: 5500000,
     itemIds: ['item-001-1', 'item-001-2', 'item-001-3'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-001-1',
@@ -45,6 +46,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-07-03T10:00:00.000Z',
     totalAmount: 8800000,
     itemIds: ['item-002-1', 'item-002-2'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-002-1',
@@ -71,6 +73,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-07-05T11:00:00.000Z',
     totalAmount: 3200000,
     itemIds: ['item-003-1', 'item-003-2', 'item-003-3'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-003-1',
@@ -104,6 +107,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-07-07T09:30:00.000Z',
     totalAmount: 6500000,
     itemIds: ['item-004-1', 'item-004-2'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-004-1',
@@ -130,6 +134,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-07-09T14:00:00.000Z',
     totalAmount: 1200000,
     itemIds: ['item-005-1', 'item-005-2', 'item-005-3'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-005-1',
@@ -163,6 +168,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-07-11T10:00:00.000Z',
     totalAmount: 9500000,
     itemIds: ['item-006-1', 'item-006-2', 'item-006-3'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-006-1',
@@ -196,6 +202,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-07-13T09:00:00.000Z',
     totalAmount: 2800000,
     itemIds: ['item-007-1', 'item-007-2'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-007-1',
@@ -222,6 +229,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-07-15T11:00:00.000Z',
     totalAmount: 7200000,
     itemIds: ['item-008-1', 'item-008-2', 'item-008-3', 'item-008-4'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-008-1',
@@ -264,6 +272,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-06-01T09:00:00.000Z',
     totalAmount: 1800000,
     itemIds: ['item-009-1', 'item-009-2'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-009-1',
@@ -290,6 +299,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-06-05T10:00:00.000Z',
     totalAmount: 4200000,
     itemIds: ['item-010-1', 'item-010-2', 'item-010-3'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-010-1',
@@ -323,6 +333,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-06-10T09:00:00.000Z',
     totalAmount: 900000,
     itemIds: ['item-011-1', 'item-011-2'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-011-1',
@@ -349,6 +360,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-06-15T10:00:00.000Z',
     totalAmount: 2400000,
     itemIds: ['item-012-1', 'item-012-2'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-012-1',
@@ -375,6 +387,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-06-18T11:00:00.000Z',
     totalAmount: 600000,
     itemIds: ['item-013-1', 'item-013-2'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-013-1',
@@ -401,6 +414,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-06-20T09:00:00.000Z',
     totalAmount: 5800000,
     itemIds: ['item-014-1', 'item-014-2', 'item-014-3'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-014-1',
@@ -434,6 +448,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-06-25T14:00:00.000Z',
     totalAmount: 3100000,
     itemIds: ['item-015-1', 'item-015-2', 'item-015-3'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-015-1',
@@ -469,6 +484,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-05-01T09:00:00.000Z',
     totalAmount: 9800000,
     itemIds: ['item-016-1', 'item-016-2'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-016-1',
@@ -495,6 +511,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-05-05T10:00:00.000Z',
     totalAmount: 850000,
     itemIds: ['item-017-1', 'item-017-2'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-017-1',
@@ -521,6 +538,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-05-10T09:00:00.000Z',
     totalAmount: 3500000,
     itemIds: ['item-018-1', 'item-018-2'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-018-1',
@@ -547,6 +565,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-05-15T11:00:00.000Z',
     totalAmount: 7800000,
     itemIds: ['item-019-1', 'item-019-2', 'item-019-3'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-019-1',
@@ -580,6 +599,7 @@ export const DUMMY_INVOICES: InvoiceWithItems[] = [
     expiresAt: '2026-05-20T10:00:00.000Z',
     totalAmount: 4600000,
     itemIds: ['item-020-1', 'item-020-2', 'item-020-3', 'item-020-4'],
+    viewCount: 0,
     items: [
       {
         notionPageId: 'item-020-1',

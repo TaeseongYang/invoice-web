@@ -5,6 +5,7 @@ import {
   getInvoiceById,
   getInvoiceItems,
   updateInvoiceStatus,
+  incrementViewCount,
 } from '@/lib/notion'
 import type { InvoiceWithItems, InvoiceStatus } from '@/lib/types/invoice'
 
@@ -32,4 +33,8 @@ export async function updateInvoiceStatusAction(
 ): Promise<void> {
   await updateInvoiceStatus(pageId, status)
   revalidateTag('invoices')
+}
+
+export async function incrementViewCountAction(pageId: string): Promise<void> {
+  await incrementViewCount(pageId)
 }

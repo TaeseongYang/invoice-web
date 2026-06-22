@@ -6,10 +6,59 @@ import { InvoiceItemsTable } from '@/components/invoice/invoice-items-table'
 import { InvoiceViewActions } from '@/components/invoice/invoice-view-actions'
 import { PdfDownloadButton } from '@/components/invoice/pdf-download-button'
 import { getInvoiceWithItemsAction } from '@/app/actions/invoices'
+import { ViewTracker } from '@/components/invoice/view-tracker'
 
-export const metadata: Metadata = {
-  title: '견적서 확인',
-  description: '견적서를 확인하고 응답하세요',
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://invoice.example.com'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ token: string }>
+}): Promise<Metadata> {
+  const { token } = await params
+  const invoice = await getInvoiceWithItemsAction(token)
+
+  if (!invoice) {
+    return {
+      title: '견적서 확인',
+      description: '유효하지 않은 견적서 링크입니다.',
+    }
+  }
+
+  const amount = invoice.totalAmount
+    ? `${invoice.totalAmount.toLocaleString('ko-KR')}원`
+    : undefined
+
+  const ogImageUrl = new URL('/api/og', APP_URL)
+  ogImageUrl.searchParams.set('title', invoice.title)
+  if (invoice.clientName)
+    ogImageUrl.searchParams.set('client', invoice.clientName)
+  if (amount) ogImageUrl.searchParams.set('amount', amount)
+
+  const description = [
+    invoice.clientName && `수신인: ${invoice.clientName}`,
+    amount && `총금액: ${amount}`,
+    '견적서를 확인하고 승인/거절해주세요.',
+  ]
+    .filter(Boolean)
+    .join(' | ')
+
+  return {
+    title: `${invoice.title} — 견적서 확인`,
+    description,
+    openGraph: {
+      title: invoice.title,
+      description,
+      images: [{ url: ogImageUrl.toString(), width: 1200, height: 630 }],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: invoice.title,
+      description,
+      images: [ogImageUrl.toString()],
+    },
+  }
 }
 
 export default async function InvoiceViewPage({
@@ -46,6 +95,7 @@ export default async function InvoiceViewPage({
 
   return (
     <div className="bg-muted/20 min-h-screen py-10">
+      <ViewTracker invoiceId={token} />
       <div className="mx-auto max-w-3xl px-4">
         {/* 견적서 헤더 */}
         <div className="mb-8 text-center">

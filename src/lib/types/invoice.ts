@@ -11,6 +11,7 @@ export type Invoice = {
   expiresAt: string | null // 유효기간 (ISO 8601)
   totalAmount: number | null // 총금액 (원)
   itemIds: string[] // Items DB 페이지 ID 목록 (Relation)
+  viewCount: number // 클라이언트 조회수 (Notion DB 속성 없으면 0)
 }
 
 // Items DB 페이지 (row = 견적서 항목 1개)
