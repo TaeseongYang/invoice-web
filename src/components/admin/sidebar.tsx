@@ -2,13 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { FileText, PlusCircle, LayoutDashboard } from 'lucide-react'
+import { FileText, LayoutDashboard } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const navItems = [
-  { title: '대시보드', href: '/', icon: LayoutDashboard },
-  { title: '견적서 등록', href: '/invoices/new', icon: PlusCircle },
-]
+const navItems = [{ title: '대시보드', href: '/', icon: LayoutDashboard }]
 
 export function Sidebar() {
   const pathname = usePathname()
