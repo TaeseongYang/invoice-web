@@ -13,6 +13,10 @@ const envSchema = z.object({
 
   // Email (서버 전용)
   RESEND_API_KEY: z.string().optional(),
+
+  // 인증 (서버 전용 — 절대 NEXT_PUBLIC_ 접두사 금지)
+  AUTH_PASSWORD: z.string().min(16).optional(),
+  AUTH_SECRET: z.string().min(32).optional(),
 })
 
 export const env = envSchema.parse({
@@ -22,6 +26,8 @@ export const env = envSchema.parse({
   NOTION_DATABASE_ID: process.env.NOTION_DATABASE_ID,
   NOTION_ITEMS_DATABASE_ID: process.env.NOTION_ITEMS_DATABASE_ID,
   RESEND_API_KEY: process.env.RESEND_API_KEY,
+  AUTH_PASSWORD: process.env.AUTH_PASSWORD,
+  AUTH_SECRET: process.env.AUTH_SECRET,
 })
 
 export type Env = z.infer<typeof envSchema>

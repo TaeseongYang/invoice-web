@@ -13,6 +13,14 @@ import type { InvoiceWithItems } from '@/lib/types/invoice'
 import { StatusBadge } from '@/components/invoice/status-badge'
 import { CopyButton } from '@/components/invoice/copy-button'
 
+const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL ??
+  (typeof window !== 'undefined' ? window.location.origin : '')
+
+function getShareUrl(notionPageId: string) {
+  return `${APP_URL}/view/${notionPageId}`
+}
+
 interface InvoiceTableProps {
   invoices: InvoiceWithItems[]
   onRowClick?: (id: string) => void
@@ -42,7 +50,7 @@ export function InvoiceTable({ invoices, onRowClick }: InvoiceTableProps) {
                 발행일
               </TableHead>
               <TableHead className="px-5 py-4 text-right text-sm font-semibold">
-                액션
+                공유 링크
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -76,7 +84,10 @@ export function InvoiceTable({ invoices, onRowClick }: InvoiceTableProps) {
                   className="px-5 py-4 text-right"
                   onClick={e => e.stopPropagation()}
                 >
-                  <CopyButton text={invoice.notionPageId} label="ID 복사" />
+                  <CopyButton
+                    text={getShareUrl(invoice.notionPageId)}
+                    label="링크 복사"
+                  />
                 </TableCell>
               </TableRow>
             ))}
@@ -119,7 +130,10 @@ export function InvoiceTable({ invoices, onRowClick }: InvoiceTableProps) {
                   className="flex items-center gap-2"
                   onClick={e => e.stopPropagation()}
                 >
-                  <CopyButton text={invoice.notionPageId} label="ID 복사" />
+                  <CopyButton
+                    text={getShareUrl(invoice.notionPageId)}
+                    label="링크 복사"
+                  />
                   <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                     <ChevronRight className="h-4 w-4" />
                   </Button>

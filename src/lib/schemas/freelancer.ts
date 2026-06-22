@@ -35,11 +35,8 @@ export const updateFreelancerSchema = z.object({
 
 export type UpdateFreelancerInput = z.infer<typeof updateFreelancerSchema>
 
+// 환경변수 패스워드 단독 인증 방식 — email 필드 제거
 export const loginSchema = z.object({
-  email: z
-    .string()
-    .min(1, '이메일을 입력해주세요.')
-    .email('올바른 이메일 형식이 아닙니다.'),
   password: z.string().min(1, '비밀번호를 입력해주세요.'),
 })
 
