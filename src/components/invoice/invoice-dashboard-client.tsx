@@ -1,18 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
-  Plus,
   FileText,
   Clock,
   CheckCircle,
   XCircle,
   LayoutDashboard,
 } from 'lucide-react'
-
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { InvoiceTable } from '@/components/invoice/invoice-table'
@@ -130,15 +126,7 @@ export function InvoiceDashboardClient({
                     ? '첫 번째 견적서를 작성하고 클라이언트에게 공유해보세요.'
                     : `${activeTab} 상태의 견적서가 없습니다.`
                 }
-                action={
-                  activeTab === '전체' ? (
-                    <Link href="/invoices/new">
-                      <Button>
-                        <Plus className="mr-2 h-4 w-4" />새 견적서 작성
-                      </Button>
-                    </Link>
-                  ) : undefined
-                }
+                action={undefined}
               />
             ) : (
               <InvoiceTable

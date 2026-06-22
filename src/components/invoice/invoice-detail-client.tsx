@@ -16,6 +16,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CopyButton } from '@/components/invoice/copy-button'
+import { PdfDownloadButton } from '@/components/invoice/pdf-download-button'
 import { sendInvoiceEmailAction } from '@/app/actions/email'
 import type { InvoiceWithItems } from '@/lib/types/invoice'
 
@@ -182,7 +183,7 @@ export function InvoiceDetailClient({ invoice }: InvoiceDetailClientProps) {
 
       {/* 상태별 액션 버튼 */}
       <Card className="border-dashed shadow-none">
-        <CardContent className="p-4">
+        <CardContent className="space-y-3 p-4">
           {invoice.status === '대기' ? (
             <Button
               className="w-full gap-2 shadow-sm"
@@ -199,6 +200,7 @@ export function InvoiceDetailClient({ invoice }: InvoiceDetailClientProps) {
           ) : (
             <CopyButton text={shareUrl} label="공유 링크 복사" />
           )}
+          <PdfDownloadButton invoiceId={invoice.notionPageId} />
         </CardContent>
       </Card>
     </div>
