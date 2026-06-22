@@ -87,22 +87,29 @@ function parseItemPage(page: PageObjectResponse): InvoiceItem {
 
 // Invoices DB 전체 목록 조회
 export async function listInvoices(): Promise<Invoice[]> {
+  if (!env.NOTION_DATABASE_ID) return []
   const notion = createNotionClient()
+  const dbId = env.NOTION_DATABASE_ID.replace(/-/g, '')
+
   const pages = await withRetry(() =>
     collectPaginatedAPI(notion.search, {
       filter: { value: 'page', property: 'object' },
       sort: { direction: 'descending', timestamp: 'last_edited_time' },
     })
   )
+
   return pages
     .filter(isFullPage)
     .filter(p => {
       const parent = p.parent
-      return (
-        parent.type === 'database_id' &&
-        parent.database_id.replace(/-/g, '') ===
-          (env.NOTION_DATABASE_ID ?? '').replace(/-/g, '')
-      )
+      // v5: parent.type === 'data_source_id', 실제 DB ID는 parent.database_id에 있음
+      if (parent.type === 'data_source_id') {
+        return (parent.database_id ?? '').replace(/-/g, '') === dbId
+      }
+      if (parent.type === 'database_id') {
+        return parent.database_id.replace(/-/g, '') === dbId
+      }
+      return false
     })
     .map(parseInvoicePage)
 }

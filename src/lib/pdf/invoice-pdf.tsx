@@ -1,3 +1,4 @@
+import path from 'path'
 import {
   Document,
   Page,
@@ -12,11 +13,11 @@ Font.register({
   family: 'NotoSansKR',
   fonts: [
     {
-      src: 'https://fonts.gstatic.com/s/notosanskr/v36/PbyxFmXiEBPT4ITbgNA5Cgm20xz64px_1hVWr0wuPNGmlQNMEfD4.woff2',
+      src: path.join(process.cwd(), 'public/fonts/NotoSansKR-Regular.woff'),
       fontWeight: 400,
     },
     {
-      src: 'https://fonts.gstatic.com/s/notosanskr/v36/PbyxFmXiEBPT4ITbgNA5Cgm20xz64px_1hVWr0wuPNGmlQNMEfD4.woff2',
+      src: path.join(process.cwd(), 'public/fonts/NotoSansKR-Bold.woff'),
       fontWeight: 700,
     },
   ],
