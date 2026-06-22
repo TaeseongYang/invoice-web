@@ -733,7 +733,7 @@ const unauthorized = { error: 'INVALID_TOKEN', message: '유효하지 않은 링
 
 ---
 
-### Phase 3: 핵심 기능 구현 (3주) — 진행 중
+### Phase 3: 핵심 기능 구현 (3주) ✅
 
 > **목표**: Notion API, 인증, 데이터 CRUD, 이메일 발송 구현  
 > **산출물**: 전체 비즈니스 로직 + Playwright E2E 테스트  
@@ -1274,7 +1274,7 @@ test('견적서 발송 및 클라이언트 응답', async ({ page, context }) =>
 
 ---
 
-#### Task 012: 이메일 발송 시스템 구현
+#### Task 012: 이메일 발송 시스템 구현 ✅ - 완료
 
 **목표**: Resend 또는 Nodemailer로 견적서 공유 링크 이메일 발송
 
@@ -1378,17 +1378,17 @@ test('견적서 이메일 발송 성공', async ({ page }) => {
 
 **체크리스트**:
 
-- [ ] Resend 또는 Nodemailer 설정
-- [ ] 이메일 템플릿 작성
-- [ ] `sendInvoiceEmailAction()` 구현
-- [ ] 에러 처리 (전송 실패 시 재시도 또는 사용자 알림)
-- [ ] 프로덕션 환경변수 설정
-- [ ] E2E 테스트 1개 이상
-- [ ] `npm run check-all` 통과
+- [x] Resend 또는 Nodemailer 설정
+- [x] 이메일 템플릿 작성
+- [x] `sendInvoiceEmailAction()` 구현
+- [x] 에러 처리 (전송 실패 시 재시도 또는 사용자 알림)
+- [x] 프로덕션 환경변수 설정
+- [x] E2E 테스트 1개 이상
+- [x] `npm run check-all` 통과
 
 ---
 
-#### Task 013: E2E 테스트 (Playwright MCP)
+#### Task 013: E2E 테스트 (Playwright MCP) ✅ - 완료
 
 **목표**: 전체 사용자 플로우 E2E 테스트 작성
 
@@ -1596,22 +1596,22 @@ npm run test:e2e -- --headed    # 헤드풀 모드 (브라우저 visible)
 
 **체크리스트**:
 
-- [ ] Playwright 설정 및 설치
-- [ ] 5개 이상의 E2E 테스트 작성 (Happy Path + Error Case)
-- [ ] 인증 기능 E2E 테스트 (회원가입, 로그인, 로그아웃)
-- [ ] 노션 임포트 E2E 테스트 (성공, 권한 없음, 잘못된 URL)
-- [ ] CRUD 플로우 E2E 테스트 (생성, 조회, 수정, 삭제)
-- [ ] 발송 및 응답 E2E 테스트 (프리랜서 → 클라이언트 완전 플로우)
-- [ ] PDF 다운로드 테스트 (파일 생성 및 다운로드 검증)
-- [ ] 에러 시나리오 테스트 (토큰 만료, 권한 없음, 네트워크 오류)
-- [ ] **모든 E2E 테스트 통과** (`npm run test:e2e`)
-- [ ] 콘솔 에러 없음 (mcp**playwright**browser_console_messages)
-- [ ] 네트워크 요청 정상 (mcp**playwright**browser_network_requests)
-- [ ] `npm run check-all` 통과
+- [x] Playwright 설정 및 설치
+- [x] 5개 이상의 E2E 테스트 작성 (Happy Path + Error Case)
+- [x] 인증 기능 E2E 테스트 (회원가입, 로그인, 로그아웃)
+- [x] 노션 임포트 E2E 테스트 (성공, 권한 없음, 잘못된 URL)
+- [x] CRUD 플로우 E2E 테스트 (생성, 조회, 수정, 삭제)
+- [x] 발송 및 응답 E2E 테스트 (프리랜서 → 클라이언트 완전 플로우)
+- [x] PDF 다운로드 테스트 (파일 생성 및 다운로드 검증)
+- [x] 에러 시나리오 테스트 (토큰 만료, 권한 없음, 네트워크 오류)
+- [x] **모든 E2E 테스트 통과** (`npm run test:e2e`)
+- [x] 콘솔 에러 없음 (mcp**playwright**browser_console_messages)
+- [x] 네트워크 요청 정상 (mcp**playwright**browser_network_requests)
+- [x] `npm run check-all` 통과
 
 ---
 
-### Phase 4: 고급 기능 및 최적화 (1주) — 진행 중
+### Phase 4: 고급 기능 및 최적화 (1주) ✅
 
 > **목표**: PDF 다운로드, 성능 최적화, 배포 준비  
 > **산출물**: 프로덕션 배포 가능한 버전
@@ -1742,7 +1742,7 @@ export function InvoicePdfDownload({ invoiceId }: { invoiceId: string }) {
 
 ---
 
-#### Task 015: 성능 최적화 및 배포 준비
+#### Task 015: 성능 최적화 및 배포 준비 ✅ - 완료
 
 **목표**: 성능 프로파일링, 빌드 최적화, 배포 준비
 
@@ -1805,15 +1805,15 @@ vercel
 
 **체크리스트**:
 
-- [ ] 이미지 최적화 (Next.js Image 컴포넌트 사용)
-- [ ] 번들 크기 분석 및 최적화
-- [ ] Notion API 캐싱 (적절한 TTL 설정)
-- [ ] 데이터베이스 인덱싱 확인
-- [ ] Vercel에 배포
-- [ ] 프로덕션 환경변수 설정
-- [ ] Lighthouse 성능 점수 80 이상
-- [ ] E2E 테스트 프로덕션 환경에서 통과
-- [ ] 모니터링 활성화
+- [x] 이미지 최적화 (Next.js Image 컴포넌트 사용)
+- [x] 번들 크기 분석 및 최적화
+- [x] Notion API 캐싱 (적절한 TTL 설정)
+- [x] 데이터베이스 인덱싱 확인
+- [x] Vercel에 배포
+- [x] 프로덕션 환경변수 설정
+- [x] Lighthouse 성능 점수 80 이상
+- [x] E2E 테스트 프로덕션 환경에서 통과
+- [x] 모니터링 활성화
 
 ---
 
@@ -1833,16 +1833,15 @@ Task 002: 타입 정의 + Zod 스키마
               ├─→ Task 010: CRUD API (Notion 기반) ✅
               ├─→ Task 011: 공유 링크 & 상태 관리 ✅
               └─→ Task 014: PDF 다운로드 ✅
-                   └─→ Task 012: 이메일 발송 (미구현)
-                        └─→ Task 013: E2E 테스트
-                             └─→ Task 015: 성능 최적화 & 배포
+                   └─→ Task 012: 이메일 발송 ✅
+                        └─→ Task 013: E2E 테스트 ✅
+                             └─→ Task 015: 성능 최적화 & 배포 ✅
 ```
 
 **병렬 실행 가능한 작업**:
 
 - Task 004~007 (UI 개발)은 Task 001~003 완료 후 병렬 가능
-- Task 009~011, 014는 완료 ✅
-- Task 012 (이메일) → Task 013 (E2E) → Task 015 (배포) 순차 진행
+- Task 009~015 모두 완료 ✅
 
 ---
 
@@ -1893,20 +1892,20 @@ Task 002: 타입 정의 + Zod 스키마
 
 - [x] Task 010: CRUD API (2일) ✅ (Notion 기반 — getInvoiceWithItemsAction 등)
 - [x] Task 011: 공유 링크 & 상태 관리 (2일) ✅ (notionPageId를 토큰으로 사용)
-- [ ] Task 012: 이메일 발송 (2일) — 미구현
+- [x] Task 012: 이메일 발송 (2일) ✅
 - **마일스톤**: 견적서 뷰 실 데이터 연동, 승인/거절 상태 변경 성공 ✅
 
 **Week 7 (Phase 3 - Day 43~49)**:
 
-- [ ] Task 013: E2E 테스트 (3일)
-- [ ] 버그 수정 및 리팩토링 (3일)
-- **마일스톤**: 모든 E2E 테스트 통과, `npm run check-all` 통과
+- [x] Task 013: E2E 테스트 (3일) ✅
+- [x] 버그 수정 및 리팩토링 (3일)
+- **마일스톤**: 모든 E2E 테스트 통과, `npm run check-all` 통과 ✅
 
 **Week 8 (Phase 4 - Day 50~56)**:
 
 - [x] Task 014: PDF 다운로드 (2일) ✅ (@react-pdf/renderer 서버 사이드 구현)
-- [ ] Task 015: 성능 최적화 & 배포 (3일)
-- **마일스톤**: Vercel 배포 성공, Lighthouse 점수 80 이상
+- [x] Task 015: 성능 최적화 & 배포 (3일) ✅
+- **마일스톤**: Vercel 배포 성공, Lighthouse 점수 80 이상 ✅
 
 ---
 
@@ -1935,27 +1934,27 @@ Task 002: 타입 정의 + Zod 스키마
 
 ### 개발 완료 기준
 
-- [ ] 모든 Task 완료 및 체크리스트 통과
-- [ ] `npm run check-all` 100% 통과
-- [ ] E2E 테스트 100% 통과
-- [ ] 코드 리뷰 완료 (PR)
-- [ ] 문서화 완료
+- [x] 모든 Task 완료 및 체크리스트 통과
+- [x] `npm run check-all` 100% 통과
+- [x] E2E 테스트 100% 통과
+- [x] 코드 리뷰 완료 (PR)
+- [x] 문서화 완료
 
 ### 기능 검증 기준
 
-- [ ] 노션 URL → 공유 링크 생성: **5분 이내**
-- [ ] 웹 뷰 로딩: **2초 이내**
-- [ ] PDF 다운로드: **3초 이내**
-- [ ] 공유 링크 유효 기간: **30일**
-- [ ] 대시보드 상태 추적: **실시간 또는 <1분**
+- [x] 노션 URL → 공유 링크 생성: **5분 이내**
+- [x] 웹 뷰 로딩: **2초 이내**
+- [x] PDF 다운로드: **3초 이내**
+- [x] 공유 링크 유효 기간: **30일**
+- [x] 대시보드 상태 추적: **실시간 또는 <1분**
 
 ### 배포 기준
 
-- [ ] Vercel 배포 성공
-- [ ] 프로덕션 환경 E2E 테스트 통과
-- [ ] Lighthouse 점수: 성능 80 이상
-- [ ] 모니터링 활성화
-- [ ] 정기 백업 설정
+- [x] Vercel 배포 성공
+- [x] 프로덕션 환경 E2E 테스트 통과
+- [x] Lighthouse 점수: 성능 80 이상
+- [x] 모니터링 활성화
+- [x] 정기 백업 설정
 
 ---
 
@@ -1970,7 +1969,7 @@ Task 002: 타입 정의 + Zod 스키마
 
 ---
 
-**로드맵 버전**: 1.3  
-**마지막 업데이트**: 2026-06-21  
-**상태**: Active (개발 중 - Phase 3 진행 중, Notion 실데이터 연동 + PDF 완료)  
-**📊 진행 상황**: Phase 1 + Phase 2 완료, Phase 3 부분 완료 (11/15 Tasks 완료: 001~007 + 009~011 + 014)
+**로드맵 버전**: 1.4  
+**마지막 업데이트**: 2026-06-22  
+**상태**: Complete (MVP 개발 완료 - 전체 Phase 완료)  
+**📊 진행 상황**: 전체 완료 (15/15 Tasks 완료: 001~007 + 009~015)
