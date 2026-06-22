@@ -1,26 +1,27 @@
 # InvoiceWeb - 노션 기반 견적서 공유 서비스
 
-노션 URL 하나로 전문적인 견적서를 클라이언트에게 공유하고,
-PDF 다운로드 및 승인/거절 응답을 받을 수 있는 서비스입니다.
+노션 DB에 저장된 견적서를 웹에서 조회하고,
+클라이언트에게 공유 링크로 확인 및 PDF 다운로드를 제공하는 서비스입니다.
+
+🔗 **배포 주소**: https://invoice-web-dentrosy.vercel.app
 
 ## 🎯 핵심 기능
 
-- **노션 자동 임포트**: 노션 페이지 URL 입력으로 견적서 자동 파싱
+- **노션 DB 연동**: 내 노션 DB에 저장된 견적서를 대시보드에서 바로 조회
+- **견적서 상세 확인**: 항목별 수량/단가/금액 테이블 확인
 - **공유 링크 생성**: 고유 토큰 기반 공개 링크 생성 및 이메일 발송
-- **웹 뷰**: 클라이언트가 링크로 접속하여 견적서 확인 (비로그인)
-- **PDF 다운로드**: 웹에서 직접 PDF 다운로드
-- **상태 관리**: 클라이언트 승인/거절/보류 응답 추적
+- **PDF 다운로드**: 견적서를 한글 폰트 지원 PDF로 다운로드
+- **클라이언트 응답**: 클라이언트가 링크로 접속하여 승인/거절 응답
+- **상태 관리**: 대기/승인/거절 상태 탭 필터링 및 통계 카드
 
 ## 🛠️ 기술 스택
 
-- **Framework**: Next.js 15.5.3 (App Router + Turbopack)
+- **Framework**: Next.js 15.3.9 (App Router + Turbopack)
 - **Runtime**: React 19.1.0 + TypeScript 5
-- **Styling**: TailwindCSS v4 + shadcn/ui
-- **Forms**: React Hook Form + Zod
-- **Database**: Supabase (PostgreSQL)
-- **Authentication**: Supabase Auth
-- **External APIs**: @notionhq/client (Notion), Resend (Email)
-- **PDF Generation**: html2pdf.js 또는 jsPDF + html2canvas
+- **Styling**: TailwindCSS v4 + shadcn/ui (new-york style)
+- **Forms**: React Hook Form + Zod + Server Actions
+- **External APIs**: @notionhq/client v5 (Notion), Resend (Email)
+- **PDF Generation**: @react-pdf/renderer + NotoSansKR (한글 폰트)
 - **Development**: ESLint + Prettier + Husky + lint-staged
 
 ## 🚀 시작하기
@@ -39,16 +40,17 @@ npm install
 # 앱 URL
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 
-# Supabase (다음 단계)
-NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-
-# Notion API (서버 전용)
+# Notion API (서버 전용 — 절대 NEXT_PUBLIC_ 접두사 금지)
 NOTION_API_TOKEN=your-notion-integration-token
+NOTION_DATABASE_ID=your-invoices-database-id
+NOTION_ITEMS_DATABASE_ID=your-items-database-id
 
-# Email (서버 전용)
+# Email (서버 전용, 선택)
 RESEND_API_KEY=your-resend-api-key
 ```
+
+> **Notion DB ID 확인 방법**: 노션에서 DB를 열고 URL의 `p=` 파라미터 값이 DB ID입니다.
+> `v=` 파라미터는 뷰 ID로 사용하지 않습니다.
 
 ### 개발 서버 실행
 
@@ -77,24 +79,35 @@ npm run check-all
 
 | 경로                     | 설명                     | 접근 권한      |
 | ------------------------ | ------------------------ | -------------- |
-| `/`                      | 홈 (서비스 소개)         | 공개           |
-| `/login`                 | 로그인                   | 비로그인만     |
-| `/signup`                | 회원가입                 | 비로그인만     |
-| `/dashboard`             | 견적서 목록 관리         | 로그인 필요    |
-| `/invoices/new`          | 노션 URL로 견적서 임포트 | 로그인 필요    |
-| `/invoices/[id]`         | 견적서 상세 + 발송       | 로그인 필요    |
-| `/invoices/[id]/sent`    | 발송 완료 확인           | 로그인 필요    |
+| `/`                      | 대시보드 (견적서 목록)   | 공개           |
+| `/invoices/[id]`         | 견적서 상세 + 발송       | 공개           |
+| `/invoices/[id]/sent`    | 발송 완료 확인           | 공개           |
 | `/view/[token]`          | 클라이언트 견적서 뷰     | 토큰 기반 공개 |
 | `/view/[token]/response` | 클라이언트 응답 완료     | 토큰 기반 공개 |
+| `/api/invoice-pdf/[id]`  | PDF 생성 API             | 서버 전용      |
 
-## 📖 문서
+## 🗃️ Notion DB 구조
 
-- [프로젝트 요구사항 (PRD)](./docs/PRD.md) - 상세한 기능 명세 및 데이터 모델
-- [프로젝트 구조 가이드](./docs/guides/project-structure.md) - 파일/폴더 구조
-- [스타일링 가이드](./docs/guides/styling-guide.md) - CSS/Tailwind 사용법
-- [컴포넌트 패턴](./docs/guides/component-patterns.md) - React 컴포넌트 작성 규칙
-- [Next.js 15 가이드](./docs/guides/nextjs-15.md) - Next.js 15 특징 및 사용법
-- [폼 처리 가이드](./docs/guides/forms-react-hook-form.md) - React Hook Form + Zod
+### Invoices DB (견적서)
+
+| 속성명      | 타입     | 설명              |
+| ----------- | -------- | ----------------- |
+| 견적서 번호 | title    | 견적서 제목/번호  |
+| 클라이언트명| rich_text| 수신인 이름       |
+| 상태        | status   | 대기 / 승인 / 거절|
+| 발행일      | date     | 견적서 발행일     |
+| 유효기간    | date     | 견적서 만료일     |
+| 총금액      | number   | 합계 금액         |
+| 항목        | relation | Items DB 연결     |
+
+### Items DB (견적 항목)
+
+| 속성명  | 타입    | 설명          |
+| ------- | ------- | ------------- |
+| 항목명  | title   | 작업/서비스명 |
+| 수량    | number  | 수량          |
+| 단가    | number  | 단위 금액     |
+| 금액    | formula | 수량 × 단가   |
 
 ## 🛠️ 개발 명령어
 
@@ -118,14 +131,6 @@ npm run format:check     # 포맷 검사만
 - 한국어 주석 (비즈니스 로직만)
 - 2칸 들여쓰기
 - 반응형 디자인 필수
-
-## 🚧 다음 단계
-
-1. **Supabase 연동** - 인증 및 데이터베이스 설정
-2. **Notion API 구현** - 견적서 자동 임포트 기능
-3. **이메일 연동** - Resend 또는 Nodemailer
-4. **PDF 생성** - html2pdf.js 또는 jsPDF + html2canvas
-5. **응답 시스템** - 클라이언트 승인/거절 처리
 
 ## 📄 라이선스
 
