@@ -18,7 +18,16 @@ const eslintConfig = [
       'out/**',
       'build/**',
       'next-env.d.ts',
+      '.playwright-mcp/**',
     ],
+  },
+  {
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+    },
   },
 ]
 
